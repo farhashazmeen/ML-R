@@ -19,13 +19,6 @@ train=spambase[id,]
 # Assign 50% of the observations as test data
 test=spambase[-id,]
 
-# Function to calculate the cosine distance cost of two matrices
-cost <- function(X,Y) {
-  
-  d = (t(X) %*% Y) / (sqrt(sum(X^2)) * sqrt(sum(Y^2)))
-  return (1 - d)
-}
-
 # Function to get the spam classification of a given index
 spam <- function(indexes,lookup_table) {
   return (lookup_table[indexes,ncol(lookup_table)])
@@ -40,12 +33,11 @@ knearest <- function(train, K, test) {
   X_h = train/ sqrt(rowSums(nospam_train^2))
   Y_h = test/ sqrt(rowSums(nospam_test^2))
   C = X_h %*% t(Y_h)
-  distance = 1 - C
+  distance = 1.0 - C
   k_distance = t(apply(distance,1,order)[,1:K])
   spam = apply(k_distance,1,spam,lookup_table=train)
   spam_means = rowMeans(spam)
-  result = spam_means
-  return (result )
+  return (spam_means)
   
 }
 
@@ -92,7 +84,7 @@ print(mean(kknn_predictions_k1 != observations))
 # Check with other prediction thresholds
 
 # Specify the threshold range
-thresholds = seq(from = 0.05, to = 0.95, by = 0.01)
+thresholds = seq(from = 0.05, to = 0.95, by = 0.05)
 
 # Converts to matrix for apply operations
 thresholds = matrix(thresholds,length(thresholds),1)
