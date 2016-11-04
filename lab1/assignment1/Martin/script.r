@@ -19,17 +19,20 @@ train=spambase[id,]
 # Assign 50% of the observations as test data
 test=spambase[-id,]
 
+# Function to calculate the cosine distance cost of two matrices
 cost <- function(X,Y) {
   
   d = (t(X) %*% Y) / (sqrt(sum(X^2)) * sqrt(sum(Y^2)))
   return (1 - d)
 }
 
+# Function to get the spam classification of a given index
 spam <- function(indexes,lookup_table) {
   return (lookup_table[indexes,ncol(lookup_table)])
 }
 
-knearest <- function(train, K, test, thresh=0.5) {
+# Function of knearest algortihm, returns the predictited probabilites for each observation
+knearest <- function(train, K, test) {
   
   nospam_train = train[,-ncol(train)]
   nospam_test = test[, -ncol(test)]
@@ -41,24 +44,31 @@ knearest <- function(train, K, test, thresh=0.5) {
   k_distance = t(apply(distance,1,order)[,1:K])
   spam = apply(k_distance,1,spam,lookup_table=train)
   spam_means = rowMeans(spam)
-  result = as.numeric(spam_means > thresh)
+  result = spam_means
   return (result )
   
 }
 
+# Returns if a specific arrays elements are over a specific threshold
+threshold <- function(threshold, data){
+  return (as.numeric(data > threshold))
+}
+
+#Function to calcuate the sensitivity of a data set
 sensitivity <- function(observations, predictions){
   result = sum((observations == 1 & predictions == observations))/ sum(predictions == 1) 
   return(result);
 }
 
+#Function to calcuate the specificity of a data set
 specificity <- function(observations, predictions){
   result = sum((observations == 0 & predictions == observations))/ sum(predictions == 0) 
   return(result);
 }
 
 observations = test$Spam
-knearest_k5 = knearest(as.matrix(train),5,as.matrix(test), 0.5)
-knearest_k1 = knearest(as.matrix(train),1,as.matrix(test), 0.5)
+knearest_k5 = as.numeric(knearest(as.matrix(train),5,as.matrix(test)) > 0.5)
+knearest_k1 = as.numeric(knearest(as.matrix(train),1,as.matrix(test)) > 0.5)
 
 print(table(observations,knearest_k5))
 print(table(observations,knearest_k1))
@@ -81,20 +91,30 @@ print(mean(kknn_predictions_k1 != observations))
 
 # Check with other prediction thresholds
 
-plot(-1,-1, xlim = c(0,1), ylim = c(0,1), xlab = "FPR", ylab = "TPR")
-for(p in seq(from = 0.05, to = 0.95, by = 0.05)) {
-  kneares_predictions = knearest(as.matrix(train),5,as.matrix(test), p)
-  
-  kknn_predictions = kknn(formula = Spam ~ ., train = train, test = test ,k = 5)
-  kknn_predictions = as.numeric(fitted.values(kknn_predictions) > p)
-  
-  knearest_sensitivity = sensitivity(observations,kneares_predictions)
-  knearest_specificity = specificity(observations,kneares_predictions)
-  
-  kknn_sensitivity = sensitivity(observations,kknn_predictions)
-  kknn_specificity = specificity(observations,kknn_predictions)
-  
-  points(1-knearest_specificity, knearest_sensitivity, col = "Green")
-  points(1-kknn_specificity, kknn_sensitivity, col = "Red")
-  
-}
+# Specify the threshold range
+thresholds = seq(from = 0.05, to = 0.95, by = 0.01)
+
+# Converts to matrix for apply operations
+thresholds = matrix(thresholds,length(thresholds),1)
+
+# Get the knearest predictions of a data set
+knearest_predictions = knearest(as.matrix(train),5,as.matrix(test))
+
+# Apply the threshold function to get the predictions 
+knearest_outcomes = t(apply(thresholds,1,threshold,data=knearest_predictions))
+
+# Calculate the specificity and the sensitivty of said predictions
+knearest_sensitivity = apply(knearest_outcomes,1,sensitivity, observations = observations)
+knearest_specificity = apply(knearest_outcomes,1,specificity, observations = observations)
+
+# Calcualte the kknn predictions
+kknn_predictions = kknn(formula = Spam ~ ., train = train, test = test ,k = 5)
+kknn_outcomes = t(apply(thresholds,1,threshold,data=fitted.values(kknn_predictions)))
+
+# Calculate the sensitivty and specificty of the kknn predictions
+kknn_sensitivity = apply(kknn_outcomes,1,sensitivity, observations = observations)
+kknn_specificity = apply(kknn_outcomes,1,specificity, observations = observations)
+
+# Plot the values as ROC curves
+plot(1-knearest_specificity,knearest_sensitivity, xlim = c(0,1), ylim = c(0,1), xlab = "FPR", ylab = "TPR")
+points(1-kknn_specificity,kknn_sensitivity, col="Green")
