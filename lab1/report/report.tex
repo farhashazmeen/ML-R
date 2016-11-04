@@ -13,16 +13,17 @@
 \usepackage{listings}
 \usepackage{mathtools}
 \lstset{basicstyle=\footnotesize\ttfamily,
-        belowcaptionskip = \bigskipamount,
-        belowskip = \bigskipamount,
         breakatwhitespace = false,
         breaklines = true,
         keepspaces = true,
+        language = R,
         showspaces = false,
         showstringspaces = false,
+        belowcaptionskip = \bigskipamount,
         framerule = 0.80pt,
-        language = C++,
-        frame = tb}
+        frame = tb,
+        belowskip = \bigskipamount,
+        escapeinside={<@}{@>}}
 
 \title{TDDE01 -- Machine Learning \\
        Group 9 Laboration Report 1}
@@ -51,4 +52,9 @@
     \nocite{*} % No warnings.
     \bibliographystyle{alpha}
     \bibliography{report}
+    \onecolumn \appendix
+    \section*{Appendix}
+
+    ...
+
 \end{document}
