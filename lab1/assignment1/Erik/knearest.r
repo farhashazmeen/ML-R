@@ -27,5 +27,5 @@ knearest <- function(train, k, test) {
     kspam_vector <- spamv[,1:k] # Select only first K.
     mean_spam <- rowMeans(data.matrix(kspam_vector))
     # Spam if >0.5, not-spam iff <=0.5.
-    return(round(mean_spam))
+    return(mean_spam)
 }
