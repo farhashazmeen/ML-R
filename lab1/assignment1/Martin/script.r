@@ -86,7 +86,8 @@ print(mean(kknn_predictions_k1 != observations))
 # Check with other prediction thresholds
 
 # Converts to matrix for apply operations
-thresholds = matrix(seq(from = 0.05, to = 0.95, by = 0.05),length(thresholds),1)
+thresholds = seq(from=0.05, to=0.95, by=0.05)
+thresholds = matrix(thresholds,length(thresholds),1)
 
 # Get the knearest predictions of a data set
 knearest_predictions = knearest(as.matrix(train),5,as.matrix(test))
