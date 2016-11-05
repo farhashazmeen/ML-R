@@ -30,8 +30,8 @@ knearest <- function(train, K, test) {
   nospam_train = train[,-ncol(train)]
   nospam_test = test[, -ncol(test)]
   
-  X_h = train/sqrt(rowSums(nospam_train^2))
-  Y_h = test/sqrt(rowSums(nospam_test^2))
+  X_h = nospam_train/sqrt(rowSums(nospam_train^2))
+  Y_h = nospam_test/sqrt(rowSums(nospam_test^2))
   C = X_h %*% t(Y_h)
   distance = 1 - C
   k_distance = t(apply(distance,1,order))
