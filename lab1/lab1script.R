@@ -38,12 +38,15 @@ predictspam = function(k, traini, testi){
   orderedDByIndex = apply(D,1,order)
   neighbours = orderedDByIndex[,1:k]
   trainSpamByIndex = train[,ncol(train)]
-  lotsofvalues = apply(neighbours,1,stupid,trainSpamByIndex)/k
+  lotsofvalues = apply(t(t(neighbours)),1,stupid,trainSpamByIndex)/k
   testisspam = apply(t(t(lotsofvalues)),1,isspam) #This is stupid but i solved it with pure intuition
   
 }
 
 ########Classification
+
+
+########For k=5
 
 predictedspamfor5 = predictspam(5,train,test)
 
@@ -52,8 +55,19 @@ confusiontablefor5 = table(predictedspamfor5,test[,ncol(test)])
 veci = table(predictedspamfor5 + test[,ncol(test)])
 missclassratefor5 = veci[1]/sum(confusiontable)
 
-#vecofneigh = trainSpamByIndex[neighbours[1:nrow(neighbours),]
-#spamfortest = colSums(train[neighbours[1:nrow(neighbours),],ncol(train)])
+###############################
+
+
+########for k=1
+
+predictedspamfor1 = predictspam(1,train,test)
+
+
+confusiontablefor1 = table(predictedspamfor1,test[,ncol(test)])
+veci = table(predictedspamfor1 + test[,ncol(test)])
+missclassratefor1 = veci[1]/sum(confusiontable)
+
+###############################
 
 #############################
 
