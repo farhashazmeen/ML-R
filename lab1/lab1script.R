@@ -1,5 +1,58 @@
 ##################
 
+if(!exists("spambase")){
+  #Change this appropriatly
+  spambase <- read_excel("C:/Users/Sebastian/Users/Desktop/TDDE01/TDDE01/lab1/spambase.xlsx") 
+}
+
+if(!exists("train")){
+  n=dim(spambase)[1]
+  set.seed(12345)
+  id=sample(1:n,floor(n*0.5))
+  train=data.matrix(spambase[id,])
+  test=data.matrix(spambase[-id,])
+}
+
+#####Disatance calculation
+Distance = function(x,y){
+  xhat = x/sqrt(rowSums(x^2))
+  yhat = y/sqrt(rowSums(y^2))
+  C = xhat%*%t(yhat)
+  return(1-C)
+}
+
+D = Distance(test,train)
+
+########
+########Classification
+
+orderedDByIndex = apply(D,1,order)
+neighbours = orderedDByIndex[,1:5] #### K = 5
+trainSpamByIndex = train[,ncol(train)]
+
+stupid = function(vec1,vec2){
+  return(sum(vec2[vec1]))
+}
+
+isspam = function(x){
+  if(x > 0.5){
+    return(1)
+  }
+  return(0)
+}
+
+lotsofvalues = apply(neighbours,1,stupid,trainSpamByIndex)/5
+
+testisspam = apply(t(t(lotsofvalues)),1,isspam) #This is stupid but i solved it with pure intuition
+
+confusiontable = table(testisspam,test[,ncol(test)])
+veci = table(testisspam + test[,ncol(test)])
+missclassrate = veci[1]/sum(confusiontable)
+
+#vecofneigh = trainSpamByIndex[neighbours[1:nrow(neighbours),]
+#spamfortest = colSums(train[neighbours[1:nrow(neighbours),],ncol(train)])
+
+#############################
 
 
 ##################################################################################################################
