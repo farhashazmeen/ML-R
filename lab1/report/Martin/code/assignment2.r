@@ -60,8 +60,7 @@ points(theta, max_likelihoods_k6, col = "Green")
 
 # l(theta) = log(p(x|theta) * p(theta)) = log(p(x|theta)) + log(p(theta)), log(p(x|theta)) = max_likelihoods_full
 posteriori_likelihood = l(max_likelihoods_full, theta, 10)
-max_theta_post = which.max(posteriori_likelihood) / 10
-print(max_theta_post)
+
 # Looks like a linear function since log(p(theta)) is huge compared to log(p(x|theta))
 plot(theta,
      posteriori_likelihood,
