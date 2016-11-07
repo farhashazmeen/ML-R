@@ -51,8 +51,8 @@ threshold <- function(threshold, data) {
 
 #Function to calcuate the sensitivity of a data set
 sensitivity <- function(observations, predictions) {
-  result = sum((observations == 1 & predictions == 1)) / (sum((observations == 1 &
-   predictions == 1)) + sum(observations == 1 & predictions == 0))
+  
+  result = sum((observations == 1 & predictions == 1)) / (sum((observations == 1 &predictions == 1)) + sum(observations == 1 & predictions == 0))
   return(result)
   
 }
@@ -103,7 +103,7 @@ print(mean(kknn_predictions_k1 != observations))
 # Check with other prediction thresholds
 
 # Converts to matrix for apply operations
-thresholds = seq(from = 0.05, to = 0.95, by = 0.01)
+thresholds = seq(from = 0.05, to = 0.95, by = 0.05)
 thresholds = matrix(thresholds, length(thresholds), 1)
 
 # Get the knearest predictions of a data set
