@@ -69,7 +69,18 @@ misclassification rate = 0.3671533
 \end{verbatim}
 The biggest difference from out own implementation is that the hit rate and confusion matrix are identical for both \(K = 1\) and \(K = 5\). The hit rate is also slightly lower that ours at about \( 0.63\).
 
-The final step involves testing the two classifiers when we use different probability thresholds. In this case we will test for all thresholds \( p(x) > 0.05,...,0.95\) with steps of \(0.01\).
+The final step involves testing the two classifiers when we use different probability thresholds. In this case we will test for all thresholds \( p(x) > 0.05,...,0.95\) with steps of \(0.01\). This will be done by drawing a \textit{ROC- curve} over the different probability thresholds. The \textit{ROC-curve} is calculated as a relation between the \textit{true negative rate} over the \textit{true positive rate}. The \textit{true positive rate} is calculated as
+\begin{equation}
+ \frac{Tp}{Tp + Fn}
+\end{equation}
+where \(Tp\) stands for the \textit{true postives} i.e. the cases where both the prediction and observations calssified the case as \textit{true}, and \(Fn\) stands for the \textit{false negatives} i.e. the cases where the prediction was \textit{false} but the observation was \textit{true}.
+
+The \textit{true negative rate} is calculated as \(1 - specificity\) where \textit{specificity} is equal to:
+\begin{equation}
+ \frac{Tn}{Tn + Fp}
+\end{equation}
+where \(Tn\) stands for the \textit{true negatives} i.e. the cases where both the prediction and observations calssified the case as \textit{false}, and \(Fp\) stands for the \textit{false positives} i.e. the cases where the prediction was \textit{true} but the observation was \textit{false}.
+
 \begin{figure}[H]
 \centering
 \begin{minipage}[]{0.5\textwidth}
