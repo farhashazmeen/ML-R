@@ -2,7 +2,7 @@
 
 if(!exists("spambase")){
   #Change this appropriatly
-  spambase <- read_excel("C:/Users/Sebastian/Users/Desktop/TDDE01/TDDE01/lab1/spambase.xlsx") 
+  spambase <- read_excel("C:/Users/Sebastian/Users/Desktop/TDDE01/TDDE01/lab1/spambase.xlsx")
 }
 
 if(!exists("train")){
@@ -13,7 +13,7 @@ if(!exists("train")){
   test=data.matrix(spambase[-id,])
 }
 
-#####Disatance calculation
+#####Distance calculation
 Distance = function(x,y){
   xhat = x/sqrt(rowSums(x^2))
   yhat = y/sqrt(rowSums(y^2))
@@ -32,28 +32,82 @@ isspam = function(x){
   return(0)
 }
 
+isspam2 = function(x){
+  if(x > seq(0.05,0.95,0.05)){
+    return(1)
+  }
+  return(0)
+}
+
+k_nearest = function(k, ftrain, ftest){
+
+  #
+  D = Distance(ftest, ftrain)
+
+  # Distance to all neighbours in sorted order.
+  orderedByIndex = apply(D, 1, order)
+
+  # Contains only the k nearest neighbors.
+  neighbours = orderedByIndex[,1:k]
+
+  # Selects the last row of train which contains the spam value
+  # 0 or 1.
+  trainSpamByIndex = ftrain[,ncol(ftrain)]
+
+  # The mean of the neighbours spam values which is 0 or 1.
+  return (meanOfNeighbours = apply(t(t(neighbours)), 1, stupid, trainSpamByIndex)/k)
+}
+
+
+
+######################Senstitivity
+sens = function(vec1,vec2){
+
+  return(sum(vec1 == 1 & vec2 == 1)/(sum(vec2 == 1)))
+
+}
+
+spec = function(vec1,vec2){
+  return(sum(vec1 == 0 & vec2 == 0)/(sum(vec2 == 0)))
+
+}
+
+
+#################
+
 #####Lets create a function that takes in k, train and test and returns a vector of spamprediction
 predictspam = function(k, traini, testi){
   D = Distance(testi,traini)
   orderedDByIndex = apply(D,1,order)
   neighbours = orderedDByIndex[,1:k]
-  trainSpamByIndex = train[,ncol(train)]
+  trainSpamByIndex = traini[,ncol(traini)]
   lotsofvalues = apply(t(t(neighbours)),1,stupid,trainSpamByIndex)/k
   testisspam = apply(t(t(lotsofvalues)),1,isspam) #This is stupid but i solved it with pure intuition
-  
+
 }
 
+predictspam2 = function(k, traini, testi){
+  D = Distance(testi,traini)
+  orderedDByIndex = apply(D,1,order)
+  neighbours = orderedDByIndex[,1:k]
+  trainSpamByIndex = traini[,ncol(traini)]
+  lotsofvalues = apply(t(t(neighbours)),1,stupid,trainSpamByIndex)/k
+  testisspam = sapply(t(t(lotsofvalues)),function(x){x>seq(0.05,0.95,0.05)}) #This is stupid but i solved it with pure intuition
+}
 ########Classification
 
 
 ########For k=5
 
-predictedspamfor5 = predictspam(5,train,test)
+predictedspamfor5 = predictspam(5, train, test)
+
+knear = k_nearest(5, train, test)
+knear_spam = apply(t(t(knear)),1,isspam)
 
 
 confusiontablefor5 = table(predictedspamfor5,test[,ncol(test)])
 veci = table(predictedspamfor5 + test[,ncol(test)])
-missclassratefor5 = veci[1]/sum(confusiontable)
+missclassratefor5 = veci[1]/sum(confusiontablefor5)
 
 ###############################
 
@@ -65,8 +119,40 @@ predictedspamfor1 = predictspam(1,train,test)
 
 confusiontablefor1 = table(predictedspamfor1,test[,ncol(test)])
 veci = table(predictedspamfor1 + test[,ncol(test)])
-missclassratefor1 = veci[1]/sum(confusiontable)
+missclassratefor1 = veci[1]/sum(confusiontablefor1)
 
+###############################
+
+
+########Time for kknn
+
+kknnfor5 = kknn(formula = Spam ~ ., train = as.data.frame(train), test = as.data.frame(test) ,k = 5)
+kknnfor1 = kknn(formula = Spam ~ ., train = as.data.frame(train), test = as.data.frame(test) ,k = 1)
+
+kknnpredictfor5 = apply(t(t(fitted.values(kknnfor5))),1,isspam)
+kknnpredictfor1 = apply(t(t(fitted.values(kknnfor1))),1,isspam)
+
+kknnconfusiontablefor5 = table(kknnpredictfor5,test[,ncol(test)])
+veci = table(kknnpredictfor5 + test[,ncol(test)])
+missclassratefor5 = veci[1]/sum(kknnconfusiontablefor5)
+
+kknnconfusiontablefor1 = table(kknnpredictfor1,test[,ncol(test)])
+veci = table(kknnpredictfor1 + test[,ncol(test)])
+missclassratefor1 = veci[1]/sum(kknnconfusiontablefor1)
+
+
+
+#############################Try pred2
+
+knear5spampred2 = sapply(knear,function(x){as.integer(x>seq(0.05,0.95,0.05))})
+knear5sensitivity = apply(t(knear5spampred2),1,sens,test[,ncol(test)])
+knear5specificity = apply(t(knear5spampred2),1,spec,test[,ncol(test)])
+
+kknn = fitted.values(kknnfor5)
+kknn5spampred2 = sapply(kknn,function(x){as.integer(x>seq(0.05,0.95,0.05))})
+kknn5sensitivity = apply(t(kknn5spampred2),1,sens,test[,ncol(test)])
+kknn5specificity = apply(t(kknn5spampred2),1,spec,test[,ncol(test)])
+#####################################
 ###############################
 
 #############################
@@ -82,7 +168,7 @@ prop = function(x,theta){
 
 # Log-likelihood function.
 loglike = function(theta,vec){  
-    return(length(vec)*log(theta) - theta*sum(vec))  
+  return(length(vec)*log(theta) - theta*sum(vec))  
 }
 
 # Fatal amount of values.
@@ -94,7 +180,7 @@ forwin = machines[[1]] #may work with machines[,1] in older version then remove 
 # Result of log-liklelohjdiofsyh given fatal many attempts with different theta.
 #loglikevec = loglike(seqstep,machines[,1])
 #loglikevec_six = loglike(seqstep, machines[1:6,])
- 
+
 # Alternative for later version 
 loglikevec = loglike(seqstep,forwin)
 loglikevec_six = loglike(seqstep, forwin[1:6])
