@@ -1,6 +1,7 @@
 \documentclass[a4paper, twocolumn]{article}
 \usepackage[pdftex, hidelinks]{hyperref}
 
+\usepackage{bm}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{algpseudocode}
@@ -34,12 +35,26 @@
         {Linköping University (LiU), Sweden}}
 
 \begin{document}
-    \pagenumbering{gobble}
+    \pagenumbering{arabic}
     \maketitle % Generate.
 
     \section*{Assignment 1}
 
-    ...
+    Nobody likes \emph{e-mail spam}, therefore methods for autonomously \emph{predicting} if a given e-mail is probably \emph{spam} or \emph{not spam} is an important task. This is a classic example where \emph{machine learning} is useful; given a set of \emph{training data} and \emph{testing data}, can we predict what is \emph{spam} and \emph{not spam} in the \emph{testing set} (without knowing the answer) by deriving a \emph{hypothesis function} built from the \emph{training data}?
+
+    By using \emph{k-nearest neighbor classification}, one can derive if an e-mail is spam or not by simply looking at \emph{similar e-mails/messages}, and picking the most likely solution by doing a \emph{``majority vote''}. First, a \emph{distance function} needs to be implemented, which is the \emph{cosine distance function} in Equation~\ref{eq:distance}, whose implementation can be found in Listing~\ref{lst:distance}, but with a optimized solution using only matrices.
+
+    \begin{equation} \label{eq:distance}
+        d(X,Y) = 1 - \frac{X^TY}{\sqrt{\sum_i{X_i^2}}\sqrt{\sum_i{Y_i^2}}}
+    \end{equation}
+
+    After defining the distance function $d(X,Y)$, one can find the \emph{e-mail/message distance} for each $Y_j$ in respect to each $X_i$. Where $X$ is the \emph{testing set} and $Y$ the \emph{training set}. Each row of the resulting matrix contains the relative distance between $X_i$ and $\forall Y_j$. Therefore, sorting each row $X_i$ and picking the first $K$ elements gives the $K$ \emph{closest messages} from the \emph{training set} in respect to each \emph{testing element}. By using this, the \emph{k-nearest neighbors} can be found, and the prediction of $\hat{Y}$ (spam, not spam) is done by using Equation~\ref{eq:knn}, where $K_i$ classify as being $C_i$.
+
+    \begin{equation} \label{eq:knn}
+        \hat{Y} = \underset{\forall C_i}{\mathrm{max}}\; p(C_i | \bm{x}),\; p(C_i | \bm{x}) \propto K_i \div K
+    \end{equation}
+
+    The \emph{k-nearest neighbor algorithm} is implemented in Listing~\ref{lst:knearest}, in the function \texttt{knearest(t,k,t')}. It works as previously described, where line \texttt{20} is calculating the \emph{distance matrix} and line \texttt{21} sorting each row, so that all $Y$ distances are relative to $X_i$. Thereafter, in line \texttt{26-27} the classification is found for the $K$-nearest neighbors of $X_i$. The \emph{mean} value is then taken, which is equivalent to $K_i \div K$ since only two classifications exist (spam and not spam), following a \emph{Cover et al.}~\cite{cover1967nearest} K-NN descriptions.
 
     \section*{Assignment 2}
 
@@ -47,7 +62,9 @@
 
     \section*{Contributions}
 
-    ...
+    \begin{itemize}
+        \item{\textbf{Erik S. V. Jansson:} wrote the initial section in \emph{Assignment 1} regarding on how the \emph{k-nearest neighbor algorithm} works, and also provided the \texttt{knearest} scripts in Listings~\ref{lst:knearest},\ref{lst:distance}.}
+    \end{itemize}
 
     \nocite{*} % No warnings.
     \bibliographystyle{alpha}
@@ -55,6 +72,7 @@
     \onecolumn \appendix
     \section*{Appendix}
 
-    ...
+    \lstinputlisting[caption={K-Nearest Neighbor Algorithm Implementation},label={lst:knearest}]{share/knearest.r}
+    \lstinputlisting[caption={Cosine Cost/Distance Formula},label={lst:distance}]{share/distance.r}
 
 \end{document}
