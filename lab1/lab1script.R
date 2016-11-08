@@ -145,13 +145,17 @@ missclassratefor1 = veci[1]/sum(kknnconfusiontablefor1)
 #############################Try pred2
 
 knear5spampred2 = sapply(knear,function(x){as.integer(x>seq(0.05,0.95,0.05))})
-knear5sensitivity = apply(t(knear5spampred2),1,sens,test[,ncol(test)])
-knear5specificity = apply(t(knear5spampred2),1,spec,test[,ncol(test)])
+knear5sensitivity = apply(knear5spampred2,1,sens,test[,ncol(test)])
+knear5specificity = apply(knear5spampred2,1,spec,test[,ncol(test)])
 
 kknn = fitted.values(kknnfor5)
 kknn5spampred2 = sapply(kknn,function(x){as.integer(x>seq(0.05,0.95,0.05))})
-kknn5sensitivity = apply(t(kknn5spampred2),1,sens,test[,ncol(test)])
-kknn5specificity = apply(t(kknn5spampred2),1,spec,test[,ncol(test)])
+kknn5sensitivity = apply(kknn5spampred2,1,sens,test[,ncol(test)])
+kknn5specificity = apply(kknn5spampred2,1,spec,test[,ncol(test)])
+
+plot(1-knear5specificity,knear5sensitivity,type = "l", col ="red", xlab = "False negative", ylab = "True positive")
+lines(1-kknn5specificity,kknn5sensitivity, col = "blue")
+
 #####################################
 ###############################
 
