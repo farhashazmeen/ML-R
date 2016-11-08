@@ -2,7 +2,7 @@
 
 if(!exists("spambase")){
   #Change this appropriatly
-  spambase <- read_excel("C:/Users/Sebastian/Users/Desktop/TDDE01/TDDE01/lab1/spambase.xlsx")
+  #spambase <- read_excel("C:/Users/Sebastian/Users/Desktop/TDDE01/TDDE01/lab1/spambase.xlsx")
 }
 
 if(!exists("train")){
@@ -178,7 +178,7 @@ loglike = function(theta,vec){
 # Fatal amount of values.
 seqstep = seq(0.05,4,0.0001)
 
-#Endast relevant för senare version
+#Endast relevant f?r senare version
 forwin = machines[[1]] #may work with machines[,1] in older version then remove bellow commented code
 
 # Result of log-liklelohjdiofsyh given fatal many attempts with different theta.
