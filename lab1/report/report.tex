@@ -88,7 +88,20 @@ misclassification rate = 0.3671533
 \end{verbatim}
     The biggest difference from out own implementation is that the hit rate and confusion matrix are identical for both \(K = 1\) and \(K = 5\). The hit rate is also slightly lower that ours at about \( 0.63\).
 
-    We then proceed to plot the classifiers in a \textit{ROC - curve} for the probability threshold \( p(x) > 0.05,...,0.95\) with steps of \(0.01\). Where the \emph{x-axis} shows the \emph{sensitivity}, calculated from the \emph{true positive} divided by \emph{false negatives} plus \emph{true positives}. While the \emph{y-axis} is the \emph{false negative rate}, which is $1 - \mathrm{specificity} = \mathrm{true\ negative} \div (\mathrm{false\ positive} + \mathrm{true\ negative})$. Whose implementation can be found in the lines \texttt{95-97} for \emph{knearest} and \texttt{109-111} for \emph{kknn} in Listing~\ref{lst:spam} \texttt{spam.r}.
+    We then proceed to plot the classifiers in a \textit{ROC - curve} for the probability threshold \( p(x) > 0.05,...,0.95\) with steps of \(0.01\). Where the \emph{x-axis} shows the \emph{sensitivity}/\emph{true positive rate} and the \emph{y-axis} shows the \emph{false negative rate}. 
+The \textit{true positive rate} is calculated as
+\begin{equation}
+ \frac{Tp}{Tp + Fn}
+\end{equation}
+where \(Tp\) stands for the \textit{true positives} i.e. the cases where both the prediction and observations classified the case as \textit{true}, and \(Fn\) stands for the \textit{false negatives} i.e. the cases where the prediction was \textit{false} but the observation was \textit{true}.
+
+The \textit{true negative rate} is calculated as \(1 - specificity\) where \textit{specificity} is equal to:
+\begin{equation}
+ \frac{Tn}{Tn + Fp}
+\end{equation}
+where \(Tn\) stands for the \textit{true negatives} i.e. the cases where both the prediction and observations classified the case as \textit{false}, and \(Fp\) stands for the \textit{false positives} i.e. the cases where the prediction was \textit{true} but the observation was \textit{false}.
+
+These operations can be found in the lines \texttt{95-97} for \emph{knearest} and \texttt{109-111} for \emph{kknn} in Listing~\ref{lst:spam} \texttt{spam.r}.
 
     The resulting \textit{ROC - curve} can be observed in the column to the right, that is in the Figure~\ref{fig:roc}.
 
