@@ -14,7 +14,14 @@
     language=R,
     basicstyle=\ttfamily
 }
+
+\title{TDDE01 -- Machine Learning \\
+       Individual Laboration Report 1}
+\author{Martin Estgren \texttt{<mares480>}}
+      
 \begin{document}
+ \pagenumbering{arabic}
+    \maketitle % Generate.
 \section{Assignment 1}
 
 The first assignment involves implementing the \textit{K-Nearest neighbor} classifier and comparing to the built in \textit{Weighted K-Nearest Neighbor} (kknn) classifier. The classifiers will be tested using a data set based on spam classification of emails given frequency of words. The distance measure that will be implemented is based on the \textit{cosine similarity}. 
@@ -39,7 +46,7 @@ Since we are looking for the K smallest values we get the K first columns of \(\
 \end{equation} 
 The values are returned as a vector where each row is a observation from the testing data set and the values are the probability of said observation being classified as spam.
 
-Next we classify the result where each observation with a probability above \( p(spam) > 0.5\) as spam. We set \(K = 5\) meaning we take into account the \(K\) nearest observations from the training set. The result is ploted as a confusion matrix, as can be observed bellow. 
+Next we classify the result where each observation with a probability above \( p(spam) > 0.5\) as spam. We set \(K = 5\) meaning we take into account the \(K\) nearest observations from the training set. The result is plotted as a confusion matrix, as can be observed bellow. 
 \begin{verbatim}
             knearest, k = 5
 observations   0   1
@@ -73,13 +80,13 @@ The final step involves testing the two classifiers when we use different probab
 \begin{equation}
  \frac{Tp}{Tp + Fn}
 \end{equation}
-where \(Tp\) stands for the \textit{true postives} i.e. the cases where both the prediction and observations calssified the case as \textit{true}, and \(Fn\) stands for the \textit{false negatives} i.e. the cases where the prediction was \textit{false} but the observation was \textit{true}.
+where \(Tp\) stands for the \textit{true positives} i.e. the cases where both the prediction and observations classified the case as \textit{true}, and \(Fn\) stands for the \textit{false negatives} i.e. the cases where the prediction was \textit{false} but the observation was \textit{true}.
 
 The \textit{true negative rate} is calculated as \(1 - specificity\) where \textit{specificity} is equal to:
 \begin{equation}
  \frac{Tn}{Tn + Fp}
 \end{equation}
-where \(Tn\) stands for the \textit{true negatives} i.e. the cases where both the prediction and observations calssified the case as \textit{false}, and \(Fp\) stands for the \textit{false positives} i.e. the cases where the prediction was \textit{true} but the observation was \textit{false}.
+where \(Tn\) stands for the \textit{true negatives} i.e. the cases where both the prediction and observations classified the case as \textit{false}, and \(Fp\) stands for the \textit{false positives} i.e. the cases where the prediction was \textit{true} but the observation was \textit{false}.
 
 \begin{figure}[H]
 \centering
@@ -88,7 +95,9 @@ where \(Tn\) stands for the \textit{true negatives} i.e. the cases where both th
   \caption{ROC - curve of  \textit{knearest} and  \textit{kknn}.\label{fig:ROC - curve} }
  \end{minipage}
 \end{figure}
-We see that out classifier, as observed in the confusion matrices, performs a couple of percentages better than \textit{kknn}.
+The blue curve is our \textit{knearest} classifier and the green curve \textit{kknn}. The red line is the reference line of a random uniform binary classifier.
+
+We see that out classifier, as observed in the confusion matrices, performs a couple of percentages better than \textit{kknn} in some values of the threshold values.
 
 
 \section{Assignment 2}
@@ -107,7 +116,7 @@ where \(\mathbf{x}\) is the observed life time of a set of machines and \( \math
   \caption{Distribution of the data set \textit{machines}.\label{fig:Distribution of the data set machines} }
  \end{minipage}
 \end{figure}
-The distribution seems to follow a typical exponential distribution where each observation is independent (as already specified for the data set). This can also be refered to as a \textit{Poisson distribution}.
+The distribution seems to follow a typical exponential distribution where each observation is independent (as already specified for the data set).
 
 We then try to find the log-likelihood \(log(p(\textbf{b} | \theta))\) using the result of above analysis. This is done by \( log( \mathbf{D} )\) for all \(\theta\) in the range \(0.1,...,20\) with \(0.1\) increments. multiple observations for each \( \theta \) we use the formula 
 \begin{equation}
@@ -125,7 +134,7 @@ The result is plotted below, both for the full data set (red) and for the first 
   \caption{Maximum log-likelihood for the full data set and the first 6 observations.\label{fig:Maximum log-likelihood for the full data set and the first 6 observations} }
  \end{minipage}
 \end{figure}
-The main takeaway from this plot is that 6 observations are not enough to perform a reliable likelihood estimation and that the theta resulting in the highest likelihood is \(\theta = 1.1\).
+What we can observe from this plot is that 6 observations are not enough to get a reliable likelihood estimation of the data set and that the theta resulting in the highest likelihood is \(\theta = 1.1\).
 
 The next task is to calculate the posterior probabilities using the \textit{Bayesian model}: 
 \begin{equation}
@@ -138,12 +147,12 @@ To calculate this we create the function \(I(\theta) = log(p(\textbf{x}|\theta) 
 \centering
 \begin{minipage}[]{0.5\textwidth}
   \includegraphics[width=\textwidth]{figures/Lab1_A2_post.png}  
-  \caption{Posteriori likelihood of the data set \textit{machines}.\label{fig:Postpriori likelihood of the data set machines} }
+  \caption{Posterior likelihood of the data set \textit{machines}.\label{fig:Postpriori likelihood of the data set machines} }
  \end{minipage}
 \end{figure}
-Although \( log(p(\mathbf{x}))\) follows a exponential decrease curve the \(p(\theta)\) follows a linear curve and is huge compared to \( log(p(\mathbf{x}))\). The maximum \(\theta\) has gone from \(1.1\) to \(0.9\).
+Although \( log(p(\mathbf{x}))\) follows a exponential decrease curve the \(p(\theta)\) follows a linear curve and has very large values compared to \( log(p(\mathbf{x}))\). The maximum \(\theta\) has gone from \(1.1\) to \(0.9\).
 
-The final step involves generating 50 new observations from the exponential distribution by using the \(\theta = 1.1\). These observations will then be ploted in a histogram and compared to a histogram of the machine lifetime data set.
+The final step involves generating 50 new observations from the exponential distribution by using the \(\theta = 1.1\). These observations will then be plotted in a histogram and compared to a histogram of the machine lifetime data set.
 
 \begin{figure}[H]
 \centering
@@ -156,7 +165,7 @@ The final step involves generating 50 new observations from the exponential dist
   \caption{Histogram over the data set \textit{machines}.\label{fig:Histogram over the data set machines} }
  \end{minipage}
 \end{figure}
-The scale of the values in the two histograms differs greatly but the overall distribution of the values are very similar. If further proof of the \textit{machines} data set was distributed in a exponential fashion was needed it can be observed here.
+In comparison to the random samples from a exponential distribution with \(\theta = 1.1\), the observations in the machines data set are very close to the exponential distribution.
 
 \section{Appendix: A - Code assignment 1}
 
