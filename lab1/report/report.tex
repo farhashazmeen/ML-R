@@ -13,6 +13,7 @@
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{mathtools}
+\usepackage{amssymb}
 \lstset{basicstyle=\footnotesize\ttfamily,
         breakatwhitespace = false,
         breaklines = true,
@@ -117,13 +118,43 @@ These operations can be found in the lines \texttt{95-97} for \emph{knearest} an
 
     \section*{Assignment 2}
 
-    ...
+	The first part of the assignment was completed by importing the data from a csv-file and assuming that the probability is exponentially distributed. Because \(L(\theta | x) = p(\theta|x)\)  [1], one can derive the log-likelihood in the following steps:\newline
+	
+	{\large \(L(\theta | x) = {\displaystyle \prod_{i = 0}^{n}}p(x_i|\theta) \newline = \displaystyle \prod_{i = 0}^{n}\theta e^{-\theta x}=\theta^n exp(-\theta \sum_{i=0}^{n}x_i) \newline \implies ln L(\theta | x)) = n ln(\theta) - \theta \sum_{i=0}^n x_i \)}
+	\newline
+	
+	Having this formulae, the sum of observations is constant as well as the length (n) of the data. Thus, one can simply plot the return value of the function for all reasonable values (0.05-4) for \(\theta\). In order to use the maximum-likelihood method to estimate \(\theta\), one simply picks the theta that is most likely to produce the observed data i.e. the \(\theta\) that produced the highest value of \(ln( L(\theta | x))\). In order to investigate how the size of the observed data affect the estimation of \(\theta\), one might simply use less of the data. \newline\newline
+	The posterior probability[2] is also called the reverse probability i.e. \(p(\theta|x)\) meaning the probability for \(\theta\) given observed data \(x\).This can be calculated in this context with \(p(x|\theta)p(\theta)\) where \(p(\theta)\) is given in the assignment description as \(10 e^{-10\theta }\). Also here the ln version of the functions may be used since the functionality is already defined earlier. This would not change the estimation of the optimal \(\theta\) since the maximum value for ln(f(x)) and f(x) dosn't change [1]. In order to use already defined functions, one can make the following derivations:\newline
+	
+	{\large \(ln(p(x|\theta)p(\theta)) = ln L\theta|x)p(\theta)) \newline = ln L) + ln(p(\theta))\)} \newline
+	
+	In order to find the most optimal estimation of \(\theta\) one simply elects the theta that produces the highest value of said function.
+	
+	Given that we use all the data and apply said data on said log-likelihood function previously described, the output is persented in figure \ref{fig:likelihood}. The maximum likelihood method gives us an estimation of \(\theta = 1.1262\). When using less of the data we produce another value \(\theta = 1.7857\) however as can be seen in figure \ref{fig:likelihood}, on the blue curve most values are not significantly different from the maximum value. This means one can not be certain when estimating \(\theta\) since other options are also viable. The black curve in figure \ref{fig:likelihood}, the estimated \(\theta \)
+	
+	\begin{figure}[H]
+		\centering
+		\begin{minipage}[]{0.5\textwidth}
+			\includegraphics[width=\textwidth]{share/loglike.eps}  
+			\caption{Log-likelihood \& postiori curves.\label{fig:likelihood} }
+		\end{minipage}
+	\end{figure}
+	
+	 The presentation of the distribution of the observed data can be viewed in figure \ref{fig:hist}, in the left histogram. The right histogram however, a randomly generated data set of 50 values is generated. The data is not completely random, but generated using an exponential distribution given the \(theta\) estimated from the 48 given data values. This of course would imply that the data sets look similar when plotted in a histogram. However this does not necessarily imply that they are representative of the entire population since the posterori-probability was neglected for this measure. 
+
+\begin{figure*}[h]
+	\includegraphics[width=0.5\textwidth]{share/hist_original.eps}
+	\includegraphics[width=0.5\textwidth]{share/hist_rexp.eps}
+	\caption{\label{fig:hist}Histogram for original and generated data.}
+\end{figure*}
 
     \section*{Contributions}
 
     \begin{itemize}
         \item{\textbf{Erik S. V. Jansson:} wrote the initial section in \emph{Assignment 1} regarding on how the \emph{k-nearest neighbor algorithm} works, and also provided the \texttt{knearest} scripts in Listings~\ref{lst:knearest},\ref{lst:distance}.}
         \item{\textbf{Martin Estgren:} wrote the sections on generating \emph{confusion matrices} and the \emph{missclassification ratio} of \emph{knearest} and \emph{kknn}. Additionally, on how to generate \emph{ROC-curves} and the plot itself. Finally, he provided Listing~\ref{lst:spam} which wraps the script functions in assignment 1 up. Additionally, he also extended the formula description on \emph{ROC-curves} for full completeness.}
+        \item{\textbf{Bjorn Jansson:} Wrote the third section.}
+        \item{\textbf{Sebastian Maghsoudi:} Wrote the first, second and fourth section.}
     \end{itemize}
 
     \nocite{*} % No warnings.
