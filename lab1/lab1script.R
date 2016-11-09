@@ -79,41 +79,17 @@ spec = function(vec1,vec2){
 
 #################
 
-#####Lets create a function that takes in k, train and test and returns a vector of spamprediction
-predictspam = function(k, traini, testi){
-  D = Distance(testi,traini)
-  orderedDByIndex = apply(D,1,order)
-  neighbours = orderedDByIndex[,1:k]
-  trainSpamByIndex = traini[,ncol(traini)]
-  lotsofvalues = apply(t(t(neighbours)),1,stupid,trainSpamByIndex)/k
-  testisspam = apply(t(t(lotsofvalues)),1,isspam) #This is stupid but i solved it with pure intuition
-
-}
-
-predictspam2 = function(k, traini, testi){
-  D = Distance(testi,traini)
-  orderedDByIndex = apply(D,1,order)
-  neighbours = orderedDByIndex[,1:k]
-  trainSpamByIndex = traini[,ncol(traini)]
-  lotsofvalues = apply(t(t(neighbours)),1,stupid,trainSpamByIndex)/k
-  testisspam = sapply(t(t(lotsofvalues)),function(x){x>seq(0.05,0.95,0.05)}) #This is stupid but i solved it with pure intuition
-}
 ########Classification
 
 
 ########For k=5
 
-predictedspamfor5 = predictspam(5, train, test)
+knear5 = k_nearest(5, train, test)
+knear5_spam = apply(t(t(knear5)),1,isspam)
 
 
-
-
-knear = k_nearest(5, train, test)
-knear_spam = apply(t(t(knear)),1,isspam)
-
-
-confusiontablefor5 = table(knear_spam,test[,ncol(test)])
-veci = table(predictedspamfor5 + test[,ncol(test)])
+confusiontablefor5 = table(knear5_spam,test[,ncol(test)])
+veci = table(knear5_spam + test[,ncol(test)])
 missclassratefor5 = veci[2]/sum(confusiontablefor5)
 vecsome = veci
 ###############################
@@ -121,11 +97,11 @@ vecsome = veci
 
 ########for k=1
 
-predictedspamfor1 = predictspam(1,train,test)
+knear1 = k_nearest(1, train, test)
+knear1_spam = apply(t(t(knear1)),1,isspam)
 
-
-confusiontablefor1 = table(predictedspamfor1,test[,ncol(test)])
-veci = table(predictedspamfor1 + test[,ncol(test)])
+confusiontablefor1 = table(knear1_spam,test[,ncol(test)])
+veci = table(knear1_spam + test[,ncol(test)])
 missclassratefor1 = veci[2]/sum(confusiontablefor1)
 
 ###############################
