@@ -237,4 +237,3 @@ maxlikepp = seqstep[which.max(lfun)]
 hist(rexp(50,maxlike), xlab = "Randomly generated data")
 hist(forwin, xlab = "Original data")
 
-################################################################################################
