@@ -42,19 +42,23 @@ isspam2 = function(x){
 k_nearest = function(k, ftrain, ftest){
 
   #
-  D = Distance(ftest, ftrain)
-
+  trainmat <- data.matrix(ftrain[,-ncol(ftrain)])
+  testmat <- data.matrix(ftest[,-ncol(ftest)])
+  D = Distance(trainmat, testmat)
+  View(D)
   # Distance to all neighbours in sorted order.
-  orderedByIndex = apply(D, 1, order)
-
+  orderedByIndex = t(apply(D, 2, order))
+  View(orderedByIndex)
   # Contains only the k nearest neighbors.
   neighbours = orderedByIndex[,1:k]
 
   # Selects the last row of train which contains the spam value
   # 0 or 1.
   trainSpamByIndex = ftrain[,ncol(ftrain)]
-
+  
   # The mean of the neighbours spam values which is 0 or 1.
+  View(neighbours)
+  
   return (meanOfNeighbours = apply(t(t(neighbours)), 1, stupid, trainSpamByIndex)/k)
 }
 
@@ -101,14 +105,17 @@ predictspam2 = function(k, traini, testi){
 
 predictedspamfor5 = predictspam(5, train, test)
 
+
+
+
 knear = k_nearest(5, train, test)
 knear_spam = apply(t(t(knear)),1,isspam)
 
 
-confusiontablefor5 = table(predictedspamfor5,test[,ncol(test)])
+confusiontablefor5 = table(knear_spam,test[,ncol(test)])
 veci = table(predictedspamfor5 + test[,ncol(test)])
-missclassratefor5 = veci[1]/sum(confusiontablefor5)
-
+missclassratefor5 = veci[2]/sum(confusiontablefor5)
+vecsome = veci
 ###############################
 
 
@@ -119,7 +126,7 @@ predictedspamfor1 = predictspam(1,train,test)
 
 confusiontablefor1 = table(predictedspamfor1,test[,ncol(test)])
 veci = table(predictedspamfor1 + test[,ncol(test)])
-missclassratefor1 = veci[1]/sum(confusiontablefor1)
+missclassratefor1 = veci[2]/sum(confusiontablefor1)
 
 ###############################
 
@@ -134,11 +141,13 @@ kknnpredictfor1 = apply(t(t(fitted.values(kknnfor1))),1,isspam)
 
 kknnconfusiontablefor5 = table(kknnpredictfor5,test[,ncol(test)])
 veci = table(kknnpredictfor5 + test[,ncol(test)])
-missclassratefor5 = veci[1]/sum(kknnconfusiontablefor5)
+KKnnmissclassratefor5 = veci[2]/sum(kknnconfusiontablefor5)
+
+
 
 kknnconfusiontablefor1 = table(kknnpredictfor1,test[,ncol(test)])
 veci = table(kknnpredictfor1 + test[,ncol(test)])
-missclassratefor1 = veci[1]/sum(kknnconfusiontablefor1)
+kknnmissclassratefor1 = veci[2]/sum(kknnconfusiontablefor1)
 
 
 
@@ -196,7 +205,7 @@ lines(seqstep, loglikevec_six, col="blue", type="l");
 
 # According to the plot the value of theta that yields highest likelihood.
 maxlike = seqstep[which.max(loglikevec)]
-
+maxlike6 = seqstep[which.max(loglikevec_six)]
 
 
 # From what we can se in the plot, the estimation of maximum likelihood is both less
@@ -216,16 +225,16 @@ l = function(theta){
 
 #Plots the probability of having observation x and theta.
 lfun = l(seqstep)
-plot(seqstep,lfun,xlab="theta", ylab="l(theta)")
-
-
+lines(seqstep,lfun)
+#text(locator(), labels = c("When data size is 6", "When data size is 48", "Posteori Probability"))
+maxlikepp = seqstep[which.max(lfun)]
 #plot(seqstep,prop(10,seqstep), col="blue", type="l")
 
 # Not used, saved for later.
 # estimatedlam = length(machines[,1])/(sum(machines))
 
 # We will make cnnclusions for tomorrow i think
-hist(rexp(50,maxlike))
-hist(forwin)
+hist(rexp(50,maxlike), xlab = "Randomly generated data")
+hist(forwin, xlab = "Original data")
 
 ################################################################################################
