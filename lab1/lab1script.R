@@ -106,8 +106,8 @@ knear_spam = apply(t(t(knear)),1,isspam)
 
 
 confusiontablefor5 = table(predictedspamfor5,test[,ncol(test)])
-veci = table(predictedspamfor5 + test[,ncol(test)])
-missclassratefor5 = veci[1]/sum(confusiontablefor5)
+vecj = table(predictedspamfor5 + test[,ncol(test)])
+missclassratefor5 = vecj[2]/sum(confusiontablefor5)
 
 ###############################
 
@@ -119,7 +119,7 @@ predictedspamfor1 = predictspam(1,train,test)
 
 confusiontablefor1 = table(predictedspamfor1,test[,ncol(test)])
 veci = table(predictedspamfor1 + test[,ncol(test)])
-missclassratefor1 = veci[1]/sum(confusiontablefor1)
+missclassratefor1 = veci[2]/sum(confusiontablefor1)
 
 ###############################
 
@@ -134,11 +134,11 @@ kknnpredictfor1 = apply(t(t(fitted.values(kknnfor1))),1,isspam)
 
 kknnconfusiontablefor5 = table(kknnpredictfor5,test[,ncol(test)])
 veci = table(kknnpredictfor5 + test[,ncol(test)])
-missclassratefor5 = veci[1]/sum(kknnconfusiontablefor5)
+kknnmissclassratefor5 = veci[2]/sum(kknnconfusiontablefor5)
 
 kknnconfusiontablefor1 = table(kknnpredictfor1,test[,ncol(test)])
 veci = table(kknnpredictfor1 + test[,ncol(test)])
-missclassratefor1 = veci[1]/sum(kknnconfusiontablefor1)
+kknnmissclassratefor1 = veci[2]/sum(kknnconfusiontablefor1)
 
 
 
