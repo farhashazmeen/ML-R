@@ -1,8 +1,7 @@
-##################
 
 if(!exists("spambase")){
   #Change this appropriatly
-  #spambase <- read_excel("C:/Users/Sebastian/Users/Desktop/TDDE01/TDDE01/lab1/spambase.xlsx")
+  spambase <- read_excel("C:/Users/Sebastian/Users/Desktop/TDDE01/TDDE01/lab1/spambase.xlsx")
 }
 
 if(!exists("train")){
@@ -42,19 +41,23 @@ isspam2 = function(x){
 k_nearest = function(k, ftrain, ftest){
 
   #
-  D = Distance(ftest, ftrain)
-
+  trainmat <- data.matrix(ftrain[,-ncol(ftrain)])
+  testmat <- data.matrix(ftest[,-ncol(ftest)])
+  D = Distance(trainmat, testmat)
+  View(D)
   # Distance to all neighbours in sorted order.
-  orderedByIndex = apply(D, 1, order)
-
+  orderedByIndex = t(apply(D, 2, order))
+  View(orderedByIndex)
   # Contains only the k nearest neighbors.
   neighbours = orderedByIndex[,1:k]
 
   # Selects the last row of train which contains the spam value
   # 0 or 1.
   trainSpamByIndex = ftrain[,ncol(ftrain)]
-
+  
   # The mean of the neighbours spam values which is 0 or 1.
+  View(neighbours)
+  
   return (meanOfNeighbours = apply(t(t(neighbours)), 1, stupid, trainSpamByIndex)/k)
 }
 
@@ -75,50 +78,29 @@ spec = function(vec1,vec2){
 
 #################
 
-#####Lets create a function that takes in k, train and test and returns a vector of spamprediction
-predictspam = function(k, traini, testi){
-  D = Distance(testi,traini)
-  orderedDByIndex = apply(D,1,order)
-  neighbours = orderedDByIndex[,1:k]
-  trainSpamByIndex = traini[,ncol(traini)]
-  lotsofvalues = apply(t(t(neighbours)),1,stupid,trainSpamByIndex)/k
-  testisspam = apply(t(t(lotsofvalues)),1,isspam) #This is stupid but i solved it with pure intuition
-
-}
-
-predictspam2 = function(k, traini, testi){
-  D = Distance(testi,traini)
-  orderedDByIndex = apply(D,1,order)
-  neighbours = orderedDByIndex[,1:k]
-  trainSpamByIndex = traini[,ncol(traini)]
-  lotsofvalues = apply(t(t(neighbours)),1,stupid,trainSpamByIndex)/k
-  testisspam = sapply(t(t(lotsofvalues)),function(x){x>seq(0.05,0.95,0.05)}) #This is stupid but i solved it with pure intuition
-}
 ########Classification
 
 
 ########For k=5
 
-predictedspamfor5 = predictspam(5, train, test)
-
-knear = k_nearest(5, train, test)
-knear_spam = apply(t(t(knear)),1,isspam)
+knear5 = k_nearest(5, train, test)
+knear5_spam = apply(t(t(knear5)),1,isspam)
 
 
-confusiontablefor5 = table(predictedspamfor5,test[,ncol(test)])
-vecj = table(predictedspamfor5 + test[,ncol(test)])
-missclassratefor5 = vecj[2]/sum(confusiontablefor5)
-
+confusiontablefor5 = table(knear5_spam,test[,ncol(test)])
+veci = table(knear5_spam + test[,ncol(test)])
+missclassratefor5 = veci[2]/sum(confusiontablefor5)
+vecsome = veci
 ###############################
 
 
 ########for k=1
 
-predictedspamfor1 = predictspam(1,train,test)
+knear1 = k_nearest(1, train, test)
+knear1_spam = apply(t(t(knear1)),1,isspam)
 
-
-confusiontablefor1 = table(predictedspamfor1,test[,ncol(test)])
-veci = table(predictedspamfor1 + test[,ncol(test)])
+confusiontablefor1 = table(knear1_spam,test[,ncol(test)])
+veci = table(knear1_spam + test[,ncol(test)])
 missclassratefor1 = veci[2]/sum(confusiontablefor1)
 
 ###############################
@@ -134,7 +116,9 @@ kknnpredictfor1 = apply(t(t(fitted.values(kknnfor1))),1,isspam)
 
 kknnconfusiontablefor5 = table(kknnpredictfor5,test[,ncol(test)])
 veci = table(kknnpredictfor5 + test[,ncol(test)])
-kknnmissclassratefor5 = veci[2]/sum(kknnconfusiontablefor5)
+KKnnmissclassratefor5 = veci[2]/sum(kknnconfusiontablefor5)
+
+
 
 kknnconfusiontablefor1 = table(kknnpredictfor1,test[,ncol(test)])
 veci = table(kknnpredictfor1 + test[,ncol(test)])
@@ -196,7 +180,7 @@ lines(seqstep, loglikevec_six, col="blue", type="l");
 
 # According to the plot the value of theta that yields highest likelihood.
 maxlike = seqstep[which.max(loglikevec)]
-
+maxlike6 = seqstep[which.max(loglikevec_six)]
 
 
 # From what we can se in the plot, the estimation of maximum likelihood is both less
@@ -216,16 +200,16 @@ l = function(theta){
 
 #Plots the probability of having observation x and theta.
 lfun = l(seqstep)
-plot(seqstep,lfun,xlab="theta", ylab="l(theta)")
-
-
+lines(seqstep,lfun)
+#text(locator(), labels = c("When data size is 6", "When data size is 48", "Posteori Probability"))
+maxlikepp = seqstep[which.max(lfun)]
 #plot(seqstep,prop(10,seqstep), col="blue", type="l")
 
 # Not used, saved for later.
 # estimatedlam = length(machines[,1])/(sum(machines))
 
 # We will make cnnclusions for tomorrow i think
-hist(rexp(50,maxlike))
-hist(forwin)
+hist(rexp(50,maxlike), xlab = "Randomly generated data")
+hist(forwin, xlab = "Original data")
 
-################################################################################################
+>>>>>>> 0ea375ee530b7a7be5ddc7aed76defde4451a7a4
