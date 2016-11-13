@@ -21,55 +21,59 @@ binary_permutations <- function(n){
   return(indexes)
 }
 
+k_fold <- function(X,Y,K){
+  n = nrow(X)
+  fold_errors = matrix(0,K,1)
+  fold_weights = matrix(0,K,(ncol(X)+1))
+  indexes = indexes(n,K)
+  for( i in 1:K){
+    test_fold_indexes = indexes[i,1]:indexes[i,2]
+    train_fold_indexes = (1:n)[-test_fold_indexes]
+    
+    test_y = Y[test_fold_indexes]
+    test_x = X[test_fold_indexes,]
+    train_x = X[train_fold_indexes,]
+    train_y = Y[train_fold_indexes]
+    result = linear_regression(as.matrix(train_x), train_y,as.matrix(test_x),test_y)
+    fold_errors[i,] = result$err
+    fold_weights[i,] = result$param
+  }
+
+  return (list(weights=colMeans(fold_weights), err=fold_errors))
+}
 best_subset <- function(X,Y,K){
   n = nrow(X)
   
   binary_permutations = binary_permutations(ncol(X))
-  feature_combinations = nrow(binary_permutations)
+  n_combinations = nrow(binary_permutations)
   
-  errors = matrix(0,feature_combinations,1)
-  predictions = matrix(0,feature_combinations,n)
-  for(combination in 1:feature_combinations){
+  combination_errors = matrix(Inf,n_combinations,1)
+  combination_weights = c()
+  combination_index = 0
+  for(combination in 1:n_combinations){
     current_features = which(binary_permutations[combination,] == 1)
     filtered_x = as.matrix(X[current_features])
-    
-    indexes = indexes(n,K)
-    print(indexes)
-    fold_errors = matrix(0,K,1)
-    for( i in 1:K){
-      # 
-      test_fold_indexes = indexes[i,1]:indexes[i,2]
-      train_fold_indexes = (1:n)[-test_fold_indexes]
-    
-      test_y = Y[test_fold_indexes]
-      test_x = filtered_x[test_fold_indexes,]
-      train_x = filtered_x[train_fold_indexes,]
-      train_y = Y[train_fold_indexes]
-      result = linear_regression(as.matrix(train_x), train_y,as.matrix(test_x),test_y)
-      fold_errors[i,] = result$err
-    }
+    k_fold = k_fold(filtered_x,Y,K)
+    combination_errors[combination,] = mean(k_fold$err)
+    best_combination_index = which.min(combination_errors)
 
-    errors[combination,] = mean(fold_errors)
- 
+    if(best_combination_index == combination){
+      combination_weights = k_fold$weights
+      combination_index = best_combination_index
+    }
   }
-  print(errors)
-  best_subset = which.min(errors)
-  best_features = binary_permutations[best_subset,]
-  return(which(best_features == 1))
+
+  return(list(indexes=which(binary_permutations[combination_index,] == 1), weights=combination_weights, err=combination_errors[combination_index,]))
 }
 
  # Linear regression between two samples, one as x-values and one as y-values
  linear_regression <- function(x_train,y_train,x_test,y_test){
-   # Add column with ones in X
-  x_train = cbind(matrix(1,nrow(x_train),1),x_train)
-  x_test = cbind(matrix(1,nrow(x_test),1),x_test)
-   # Find parameter vector
-   w = solve(t(x_train) %*% x_train) %*% t(x_train) %*% y_train
-   w = as.vector(w)
-   # Predicted values
-   pY = x_test %*% w
-   # Calculate error rate
-   errors = sum((y_test - pY)^2)
+    x_train = cbind(matrix(1,nrow(x_train),1),x_train)
+    x_test = cbind(matrix(1,nrow(x_test),1),x_test)
+    w = solve(t(x_train) %*% x_train) %*% t(x_train) %*% y_train
+    w = as.vector(w)
+    pY = x_test %*% w
+    errors = sum((y_test - pY)^2)
    return(list(param=w, pred=pY, err=errors))
  }
 
@@ -83,22 +87,16 @@ data = data[s,]
 
 X = data[,2:ncol(data)]
 Y = as.matrix(data$Fertility)
-print(best_subset(X,Y,5))
-# 
-# 
-# s = sample(1:nrow(data),nrow(data))
-# data = data[s,]
-# Y = data$Fertility
-# X = data[,2:(ncol(data))]
-#X = as.matrix(c(1,2,3,4,5,6,7,8,9))
-#Y = as.matrix(c(2,4,6,8,10,12,14,16,18))
-#folds = k_folds(X,Y,5)
-#print(folds)
-#print(t(folded_data))
-#
-# Test data
-# X = matrix(c(1,2,3,4,5,6,7,8,9),9,1)
-# Y = matrix(c(1,2,3,4,5,6,7,8,9),9,1)
-# yh = linear_regression(X,Y)
-# plot(X,Y,col="red")
-# lines(X,yh,col="green")
+best_features = best_subset(X,Y,5)
+print(best_features)
+X = X[,best_features$indexes]
+print(X)
+model = linear_regression(x_train = as.matrix(X),y_train = Y,x_test = as.matrix(X),y_test = Y)
+for(i in 1:ncol(X)){
+  plot(X[,i],Y)
+  # From best_features
+  abline(best_features$weights[1],best_features$weights[i+1],col="Red")
+  # From new regression
+  abline(model$param[1],model$param[i+1],col="Green")
+  
+}
