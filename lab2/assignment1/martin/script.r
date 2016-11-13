@@ -24,17 +24,17 @@ binary_permutations <- function(n){
 best_subset <- function(X,Y,K){
   n = nrow(X)
   
-  dummy_features = binary_permutations(ncol(X))
-  feature_combinations = nrow(dummy_features)
-  indexes = indexes(n,K)
+  binary_permutations = binary_permutations(ncol(X))
+  feature_combinations = nrow(binary_permutations)
   
   errors = matrix(0,feature_combinations,1)
   predictions = matrix(0,feature_combinations,n)
   for(combination in 1:feature_combinations){
-    current_features = which(dummy_features[combination,] == 1)
+    current_features = which(binary_permutations[combination,] == 1)
     filtered_x = as.matrix(X[current_features])
-
-    mean_fold_errors = matrix(0,K,1)
+    
+    indexes = indexes(n,K)
+    fold_errors = matrix(0,K,1)
     for( i in 1:K){
       # 
       test_fold_indexes = indexes[i,1]:indexes[i,2]
@@ -45,15 +45,15 @@ best_subset <- function(X,Y,K){
       train_x = filtered_x[train_fold_indexes,]
       train_y = Y[train_fold_indexes]
       result = linear_regression(as.matrix(train_x), train_y,as.matrix(test_x),test_y)
-      mean_fold_errors[i,] = result$err
-     # predictions[combination,] = result$pred
+      fold_errors[i,] = result$err
     }
-    errors[combination,] = mean(mean_fold_errors)
+
+    errors[combination,] = mean(fold_errors)
  
   }
-  print(errors)
-  best_features = which(dummy_features[which.min(errors),] == 1)
-  return(best_features)
+  best_subset = which.min(errors)
+  best_features = binary_permutations[best_subset,]
+  return(which(best_features == 1))
 }
 
  # Linear regression between two samples, one as x-values and one as y-values
