@@ -12,8 +12,10 @@ plot(data$Protein,data$Moisture)
 
 # task 2
 # Find a probailist model explaining Mi. where M is a polynomial model of the protein up to power i
-# Why is it important to sue mean squared error whne fitting model?
+# Why is it important to use mean squared error whne fitting model?
 
+# We approximate the model as w0 + w1x^1 + w2x^2 ...
+# Use MSE instead of SSE because MSE is less dependent on
 
 # task 3
 # Divide the data into traning and test set 50/50.
@@ -30,9 +32,9 @@ train_error = matrix(0,power,1)
 test_error = matrix(0,power,1)
 
 for(i in 1:power) {
-  regression_model = lm(Moisture ~ poly(Protein,i), data=train_data)
-  train_predictions = predict(regression_model,train_data)
-  test_predictions = predict(regression_model,test_data)
+  model = lm(Moisture ~ poly(Protein,i), data=train_data)
+  train_predictions = predict(model,train_data)
+  test_predictions = predict(model,test_data)
   
   train_error[i,] = mean((train_data$Moisture - train_predictions)^2)
   test_error[i,] = mean((test_data$Moisture - test_predictions)^2)
@@ -46,6 +48,8 @@ lines(1:power,test_error, col="Red")
 # task 4
 # Use stepAIC to perform variable selection over a linear model with channel1-100 as predictors and Fat as response
 #   Comment on how many predictors were selected
+  # Remove eveyrting except Fat and channels
+  # Perform feature slection and record number of features
 
 # task 5
 #  Fit a ridge regresion model to the same predictor/response varaibles

@@ -34,6 +34,7 @@ best_subset <- function(X,Y,K){
     filtered_x = as.matrix(X[current_features])
     
     indexes = indexes(n,K)
+    print(indexes)
     fold_errors = matrix(0,K,1)
     for( i in 1:K){
       # 
@@ -51,6 +52,7 @@ best_subset <- function(X,Y,K){
     errors[combination,] = mean(fold_errors)
  
   }
+  print(errors)
   best_subset = which.min(errors)
   best_features = binary_permutations[best_subset,]
   return(which(best_features == 1))
@@ -71,14 +73,19 @@ best_subset <- function(X,Y,K){
    return(list(param=w, pred=pY, err=errors))
  }
 
+ 
 data = swiss
+set.seed(12345)
+s = sample(1:nrow(data),nrow(data))
+data = data[s,]
 # ============
 #fold_indexes(nrow(data),5)
+
 X = data[,2:ncol(data)]
 Y = as.matrix(data$Fertility)
 print(best_subset(X,Y,5))
 # 
-# set.seed(12345)
+# 
 # s = sample(1:nrow(data),nrow(data))
 # data = data[s,]
 # Y = data$Fertility
