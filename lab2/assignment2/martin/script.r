@@ -71,12 +71,12 @@ data = data[,-which(colnames(data) == "Fat")]
 data = data[,-which(colnames(data) == "Protein")]
 data = as.matrix(data[,-which(colnames(data) == "Moisture")])
 
-ridge = glmnet(x=data, y=data_y, alpha=0, nlambda=100)
+ridge = glmnet(x=data, y=data_y, alpha=0)
 plot(ridge, xvar="lambda")
 
 # task 6
 # Do the same stuff but with LASSO, compare with ridge
-lasso = glmnet(x=data, y=data_y, alpha=1, nlambda=100)
+lasso = glmnet(x=data, y=data_y, alpha=1)
 plot(lasso, xvar="lambda")
 
 # task 7
@@ -85,8 +85,10 @@ plot(lasso, xvar="lambda")
 #   show a plot of CV scores in comparasion to lambda
 
 lasso_cv = cv.glmnet(data,data_y, alpha=1)
-lasso_cv_lambda = lasso_cv$lambda.min
-n_lass_cv = sum(as.matrix(coef(lasso_cv)) != 0)
+lasso_cv_lambda = min(lasso_cv$lambda)
+n_lass_cv = sum(coef(lasso_cv) != 0)
+print(lasso_cv_lambda)
 print(n_lass_cv)
+plot(lasso_cv)
 # task 8 
 # compare result from 4 and 7

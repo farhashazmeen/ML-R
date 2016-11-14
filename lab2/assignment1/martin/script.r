@@ -13,6 +13,7 @@ indexes <- function(n,k){
   return(indexes)
 }
 
+# Deprecated because of reasons
 binary_permutations <- function(n){
   indexes = matrix(0,2^n-1,n)
   for(i in 1:2^n-1){
@@ -43,27 +44,42 @@ k_fold <- function(X,Y,K){
 }
 best_subset <- function(X,Y,K){
   n = nrow(X)
+  columns = ncol(X)
+  print(columns)
   
-  binary_permutations = binary_permutations(ncol(X))
-  n_combinations = nrow(binary_permutations)
-  
-  combination_errors = matrix(Inf,n_combinations,1)
-  combination_weights = c()
-  combination_index = 0
-  for(combination in 1:n_combinations){
-    current_features = which(binary_permutations[combination,] == 1)
-    filtered_x = as.matrix(X[current_features])
-    k_fold = k_fold(filtered_x,Y,K)
-    combination_errors[combination,] = mean(k_fold$err)
-    best_combination_index = which.min(combination_errors)
+  errors = matrix(0,columns,2^columns)
+  mean_error_rates = matrix(0,columns,1)
+  best_error = Inf
+  best_indexes = c()
+  best_weights = c()
+  for(n_features in 1:columns){
+    binary_permutations = binary_permutations(ncol(X))
+    binary_permutations = t(combn(1:columns,n_features))
+    n_combinations = nrow(binary_permutations)
 
-    if(best_combination_index == combination){
-      combination_weights = k_fold$weights
-      combination_index = best_combination_index
+    combination_errors = matrix(Inf,n_combinations,1)
+
+    for(combination in 1:n_combinations){
+      current_features = binary_permutations[combination,]
+      filtered_x = as.matrix(X[current_features])
+      k_fold = k_fold(filtered_x,Y,K)
+      combination_errors[combination,] = mean(k_fold$err)
+      best_combination_index = which.min(combination_errors)
+  
+      if(combination_errors[best_combination_index,] < best_error){
+        best_weights = k_fold$weights
+        best_indexes = binary_permutations[combination,]
+        best_error = combination_errors[best_combination_index,]
+      }
+      
     }
+    mean_error_rates[n_features,] = mean(combination_errors)
+    
   }
-
-  return(list(indexes=which(binary_permutations[combination_index,] == 1), weights=combination_weights, err=combination_errors[combination_index,]))
+  plot(1:columns,mean_error_rates, type = "l", ylim = c(500,1300))
+  points(length(best_indexes),best_error, col="Red")
+  print(best_error)
+  return(list(indexes=best_indexes, weights=best_weights, err=best_error))
 }
 
  # Linear regression between two samples, one as x-values and one as y-values
@@ -93,7 +109,7 @@ X = X[,best_features$indexes]
 print(X)
 model = linear_regression(x_train = as.matrix(X),y_train = Y,x_test = as.matrix(X),y_test = Y)
 for(i in 1:ncol(X)){
-  plot(X[,i],Y)
+  plot(X[,i],Y, xlab = colnames(X)[i])
   # From best_features
   abline(best_features$weights[1],best_features$weights[i+1],col="Red")
   # From new regression

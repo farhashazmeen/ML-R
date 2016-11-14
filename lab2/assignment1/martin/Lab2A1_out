@@ -1,0 +1,59 @@
+[1] 5
+[1] 533.1911
+$indexes
+[1] 1 3 4 5
+
+$weights
+[1] 62.6893884 -0.1597200 -0.9860246  0.1253499  1.0664524
+
+$err
+[1] 533.1911
+
+             Agriculture Education Catholic Infant.Mortality
+Martigwy            78.2         6    98.96             19.4
+Le Locle            16.7        13    11.22             18.9
+Monthey             64.9         3    98.22             20.2
+Boudry              38.4        12     5.62             20.3
+Lavaux              73.0         9     2.84             20.0
+Broye               70.2         7    92.85             23.6
+Avenches            60.7        12     4.43             22.7
+Morges              59.8        10     5.23             18.0
+Vevey               26.8        19    18.46             20.9
+Sion                63.1        13    96.83             18.1
+Delemont            45.1         9    84.84             22.2
+Porrentruy          35.3         7    90.57             26.6
+Payerne             58.1         8     5.23             23.8
+Courtelary          17.0        12     9.96             22.2
+Aubonne             67.5         7     2.27             19.1
+Cossonay            69.3         5     2.82             18.7
+Herens              89.7         2   100.00             18.3
+Conthey             85.9         2    99.71             15.1
+St Maurice          75.9         9    99.06             17.8
+Paysd'enhaut        63.5         3     2.56             18.0
+Yverdon             49.5         8     6.10             22.5
+Gruyere             53.3         7    97.67             21.0
+Oron                71.2         1     2.40             21.0
+Grandson            34.0         8     3.30             20.0
+Entremont           84.9         6    99.68             19.8
+V. De Geneve         1.2        53    42.34             18.0
+Nyone               50.9        12    15.14             16.7
+Veveyse             64.5         6    98.61             24.5
+Neuveville          43.5        15     5.16             20.6
+Moudon              55.1         3     4.52             22.4
+Rive Droite         46.6        29    50.43             18.2
+Rive Gauche         27.7        29    58.33             19.3
+Franches-Mnt        39.7         5    93.40             20.2
+Sarine              45.2        13    91.38             24.4
+La Vallee           15.2        20     2.15             10.8
+Rolle               60.8        10     7.72             16.3
+Orbe                54.1         6     4.20             15.3
+Val de Ruz          37.6         7     4.97             20.0
+ValdeTravers        18.7         7     8.65             19.5
+Sierre              84.6         3    99.46             16.3
+Lausanne            19.4        28    12.11             20.2
+La Chauxdfnd         7.7        11    13.79             20.5
+Aigle               62.0        12     8.52             16.5
+Moutier             36.5         7    33.77             20.3
+Echallens           72.6         2    24.20             21.2
+Neuchatel           17.6        32    16.92             23.0
+Glane               67.8         8    97.16             24.9
