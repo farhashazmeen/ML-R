@@ -88,7 +88,7 @@
 
             \(\hat{\mathbf{w}} = (X^T X)^{-1} X^T Y\), where $X$ is a predictor matrix and $Y$ is the response vector and $\hat{\mathbf{w}}$ the estimated parameters for all predictors.
 
-            This is used when predicting the response vector $\hat{\mathbf{y}} = X' \hat{\mathbf{y}}$ (\emph{fixa detta!! lägg till ett}).
+            This is used when predicting the response vector $\hat{\mathbf{y}} = X \hat{\mathbf{w}}$, which is used in Algorithm~\ref{alg:kfoldcv} in line 6.
 
     \subsection*{Analysis}
 
@@ -96,7 +96,7 @@
 
         \begin{figure}[H]
         \centering
-        \begin{minipage}[]{0.5\textwidth}
+        \begin{minipage}[]{0.35\textwidth}
         \includegraphics[width=\textwidth]{share/Lab2A1_me_features.png}  
         \caption{The mean error rate for different number of feature combinations.\label{fig:features} }
         \end{minipage}
@@ -121,8 +121,7 @@
         \end{figure}
 
     \section*{Assignment 2}
-    It turns out moisture in meat might be correlated to the concentration of protein. The data given in the assignment yields the plot presented in figure \ref{fig:moistprot}. It is rather clear that said statement is true since the ppoints seems distributed linearly. Assuming there is some linear model M that fits the data sufficiently well, one can might suspect that there is a model of higher polynomial order that fits it even better. The moidel can be 
-    described in the following manner \(M_i \sim N(\sum_{j=0}^{i} w_{j} x^{i},\sigma^2)\). The assignment specifies that observations above polynomial order 6 is completely inadvisable in this context.  
+    It turns out moisture in meat might be correlated to the concentration of protein. The data given in the assignment yields a plot which has points densely located around a line. Meaning, it is rather clear that said statement is true since the points seem distributed linearly. The plot for this can be found in the Appendix. Assuming there is some linear model M that fits the data sufficiently well, one can might suspect that there is a model of higher polynomial order that fits it even better. The model can be described in the following manner: \(M_i \sim N(\sum_{j=0}^{i} w_{j} x^{i},\sigma^2)\). The assignment specifies that observations above polynomial order 6 is completely inadvisable in this context (only $M_{1 \mathrm{\ to\ } 6})$.
 
         \begin{figure}[H]
         \centering
@@ -133,36 +132,36 @@
         \end{figure}
 
 
-        From the plot in figure \ref{fig:depends} the reader can observe that increasing the polynomial order leads to overfitting. This event is caused because though MSE for the training set decreases, the test set MSE is increasing. This means that any model \(M_i\) where $i > 1$, probably leads to worse predictions for the rest of the population.
+        From the plot in figure \ref{fig:depends} the reader can observe that increasing the polynomial order leads to overfitting. This event is caused because though MSE for the training set decreases, the test set MSE is increasing. This means that any model \(M_i\) where $i > 1$, probably leads to worse predictions for the rest of the observation (not part of training data).
 
-        The following explanations concerns how the input variables for Channels 1 - 100 correlates to Fat contents. By doing variable selection using \texttt{stepAIC()}, which is a built-in \emph{R} function for doing this. \texttt{stepAIC()} works by concluding a model by removing and adding features to it. It starts the algorithm with the entire feature set, then removes one feature depending on a quantified representation of the model that takes into consideration its prediction accuracy as well as its necessity. One can define the direction of the algorithm, meaning it will only remove variables if one defines the direction as \emph{backwards}, and adding if it is defined as \emph{forward}, but using the \emph{both} keyword, they can be applied tougher. The \emph{both} keyword will result in a ``brute force'' solution which should elect the optimal set of features. By applying \texttt{stepAIC} to the dataset, where the feature set are \emph{Channel 1 - 100} and the response \emph{Fat}, the results were a staggering 64 features, where most were selected in the backwards part of the algorithm.
+        The following explanations concerns how the input variables for Channels 1 - 100 correlates to Fat contents by doing variable selection using \texttt{stepAIC()}, which is a built-in \emph{R} function for doing this. \texttt{stepAIC()} works by constructing a model from removing and adding features to it. It starts the algorithm with the entire feature set, then removes one feature depending on a quantified representation of the model that takes into consideration its prediction accuracy as well as its necessity. One can define the direction of the algorithm, meaning it will only remove variables if one defines the direction as \emph{backwards}, and adding if it is defined as \emph{forward}, but using the \emph{both} keyword, they can be applied tougher. The \emph{both} keyword will result in a ``brute force'' solution which should elect the optimal set of features. By applying \texttt{stepAIC} to the dataset, where the feature set are \emph{Channel 1 - 100} and the response \emph{Fat}, the results were a staggering 64 features, where most were selected in the backwards part of the algorithm.
 
-        Ridge regression works by taking into consideration the size of the parameters, this results in less variance for parameters since there are less options to choose from. By adding a representation of the size and factorize it by a \emph{penalty rate} ($\lambda$ in this case), one can control the importance of the size of parameters, meaning by increasing $\lambda$, it is more desirable for the algorithm to select such small parameters. This is done by adding the term $\sum_{i}{\mathbf{w}^2}$ to the usual \emph{OLS formula}. The library \emph{glmnet} provides such functionality, by setting the parameter $\lambda = 0.0$ (in \emph{glmnet()} that is), one can use \emph{Ridge regression} on the existing dataset. This yields Figure~\ref{fig:ridge}, as astute reader can observe, the coefficients converge uniformly towards zero, which is of course implied from the previously described explanation of Ridge.
+        Ridge regression works by taking into consideration the size of the parameters, this results in less variance for parameters since there are less options to choose from. By adding a representation of the size and factorize it by a \emph{penalty rate} ($\lambda$ in this case), one can control the importance of the size of parameters, meaning by increasing $\lambda$, it is more desirable for the algorithm to select such small parameters. This is done by adding the term $\sum_{i}{\mathbf{w}^2}$ to the usual \emph{OLS formula}. The library \emph{glmnet} provides such functionality. By setting the parameter $\lambda = 0.0$ (in \emph{glmnet()} that is), one can use \emph{Ridge regression} on the existing dataset. This yields Figure~\ref{fig:ridge}, as astute reader can observe, the coefficients converge uniformly towards zero, which is of course implied from the previously described explanation of Ridge (and also more graphically from Figure~\ref{fig:shape}).
 
     \begin{figure}[h!]
         \centering
-        \caption{Ridge}
+        \caption{Ridge regression penalization.}
         \label{fig:ridge}
         \includegraphics[width=0.35\textwidth]{share/ridge.eps}
     \end{figure}
 
-        LASSO works similarly to Ridge, except that it represents the size of the parameters differently. Rather than using $\sum_{i}{\mathbf{w}^2}$ is uses $\sum_{i}{|\mathbf{w}|}$ instead. See Figure~\ref{fig:shape}, as can be seen, the edges are linear and there are four points where the distance from the origin is as large as possible, making at least one parameter zero. Because of this, LASSO converges individual parameters to zero faster than Ridge (instead of uniformly), this is because a tangent has to be parallel with the line from one extreme point to another (created from a feature), if it doesn't, the intersection will converge to an extreme point primarily. Thus, it excludes features in the model by assigning zero as a parameter. Practically, this can also be implemented by using \emph{glmnet}, this time by setting $\lambda = 1.0$. Figure~\ref{fig:lasso} confirms the previous assertions, the coefficients converge to zero not as uniformly as Ridge, in fact, they seem to converge individually (in an iterative fashion).
+        LASSO works similarly to Ridge, except that it represents the size of the parameters differently. Rather than using $\sum_{i}{\mathbf{w}^2}$ is uses $\sum_{i}{|\mathbf{w}|}$ instead. See Figure~\ref{fig:shape}. As can be seen, the edges are linear and there are four points where the distance from the origin is as large as possible, making at least one parameter zero. Because of this, LASSO converges individual parameters to zero faster than Ridge (instead of uniformly), this is because a tangent has to be parallel with the line from one extreme point to another (created from a feature), if it doesn't, the intersection will converge to an extreme point primarily. Thus, it excludes features in the model by assigning zero as a parameter. Practically, this can also be implemented by using \emph{glmnet}, this time by setting $\lambda = 1.0$. Figure~\ref{fig:lasso} confirms the previous assertions, the coefficients converge to zero not as uniformly as Ridge, in fact, they seem to converge individually (in an iterative fashion, after another).
 
     \begin{figure}[h!]
         \centering
-        \caption{LASSO on the left, Ridge on the right. Distributed under the CC-license, created by \emph{Rezamohammadighazi}.}
+        \caption{LASSO on the left, Ridge on the right. Distributed under the CC-license, created by \emph{Rezamohammadighazi} in LASSO on Wikipedia.}
         \label{fig:shape}
         \includegraphics[width=0.35\textwidth]{share/shape.jpg}
     \end{figure}
 
     \begin{figure}[h!]
         \centering
-        \caption{LASSO}
+        \caption{LASSO regression penalization.}
         \label{fig:lasso}
         \includegraphics[width=0.35\textwidth]{share/lasso.eps}
     \end{figure}
 
-        By using the built in \emph{k-fold cross-validation} algorithm in \emph{glmnet} for the \emph{Lasso model}, the best feature selection can be found. How \emph{k-fold cross-validation} work is explained back in Assignment 1. The best $\lambda$ has been reported to be around $0.029$ after running \texttt{cv.glmnet} for the same feature and response variables. Also, after plotting the \emph{log penalty} against the \emph{mean square error}, Figure~\ref{fig:kfold} is produced. As can be seen, the marked interval displays the best set of selected features, with their respective penalty values. The algorithm has selected 13 features.
+        By using the built in \emph{k-fold cross-validation} algorithm in \emph{glmnet} for the \emph{Lasso model}, the best feature selection can be found. How \emph{k-fold cross-validation} work is explained back in Assignment 1. The best $\lambda$ has been reported to be around $0.029$ after running \texttt{cv.glmnet} for the same feature and response variables. Also, after plotting the \emph{log penalty} against the \emph{mean square error}, Figure~\ref{fig:kfold} is produced. As can be seen, the marked interval displays the best set of selected features, with their respective penalty values. The algorithm has selected 13 features, quite a few less than \emph{stepAIC}.
 
     \begin{figure}[h]
         \centering
@@ -171,15 +170,26 @@
         \includegraphics[width=0.35\textwidth]{share/kfold.eps}
     \end{figure}
 
-    The results produced from \texttt{stepAIC()} gave 64 selected features, while \emph{k-fold cross-validation with the LASSO regression} produced only a set of 13 features. LASSO is more efficient when larger quantities of data are to be used when training a model, while \texttt{stepAIC()} will take longer to process but will probably result in a lower error rate.
-
-    \emph{``Yet, in an abstract sense, a more detailed assumption based on a specific set of data implicitly leads to overfitting and thus is not representative of the entire population'' -- Maggan, 2016}.
+    The results produced from \texttt{stepAIC()} gave 64 selected features, while \emph{k-fold cross-validation with the LASSO regression} produced only a set of 13 features. LASSO is more efficient when larger quantities of data are to be used when training a model, while \texttt{stepAIC()} will take longer to process but will in most cases result in a lower error rate value.
 
     \section*{Contributions}
+
+    The written text has been contributed by all members of the group, where it was re-written from scratch together. However, certain plots, scripts and also algorithms were taken from certain individual reports. \emph{Erik} contributed with \emph{Algorithm 1} and some of the plots for \emph{Ridge} and \emph{Lasso} while \emph{Martin} contributed with most of the plots in Assignment 1 and also was chosen to provide the scripts for both assignments (to not have to piece together scripts, which was a hassle in past report). \emph{Sebastian} provided explanations on \emph{Ridge} \& \emph{Lasso}.
 
     \nocite{*} % No warnings.
     \bibliographystyle{alpha}
     \bibliography{report}
     \onecolumn \appendix
     \section*{Appendix}
+
+    \lstinputlisting[caption={Script for Assignment 1},label={lst:assignment1}]{../share/script.r}
+    \lstinputlisting[caption={Script for Assignment 2},label={lst:assignment2}]{../share/script2.r}
+
+    \begin{figure}[h]
+        \centering
+        \caption{Moisture versus Protein}
+        \label{fig:moistprot}
+        \includegraphics[width=0.35\textwidth]{share/linear.eps}
+    \end{figure}
+
 \end{document}
