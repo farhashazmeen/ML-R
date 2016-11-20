@@ -33,9 +33,17 @@ print(res1)
 print(res2)
 # MISSING: use these to derive  decision boundary coefficients 'res'
 res = res1-res2
+intercept = -res[3] / res[2]
+slope = -res[1]/res[2]
+print(intercept)
+print(slope)
 # classification
 d=res[1]*X[,1]+res[2]*X[,2]+res[3]
 Yfit=(d>0)
-plot(X[,1], X[,2], col=Yfit+2, xlab="CL", ylab="RW")
+plot(X[,1], X[,2], col=Yfit+3, xlab="CL", ylab="RW")
 #MISSING: use 'res' to plot decision boundary. 
-plot(d)
+abline(intercept,slope)
+abline(res1[3]/res1[2],res1[1]/res1[2])
+abline(res2[3]/res2[2],res2[1]/res2[2])
+
+
