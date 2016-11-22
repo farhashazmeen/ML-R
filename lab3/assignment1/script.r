@@ -43,7 +43,14 @@ Yfit=(d>0)
 plot(X[,1], X[,2], col=Yfit+3, xlab="CL", ylab="RW")
 #MISSING: use 'res' to plot decision boundary. 
 abline(intercept,slope)
-abline(res1[3]/res1[2],res1[1]/res1[2])
-abline(res2[3]/res2[2],res2[1]/res2[2])
 
-
+model = glm( sex ~ CL + RW, data = data, family = "binomial")
+res_log = coefficients(model)
+d_log = res_log[2]*X[,1]+res_log[3]*X[,2]+res_log[1]
+Yfit_log=(d_log>0)
+par(ask = TRUE)
+plot(X[,1], X[,2], col=Yfit_log+2, xlab="CL", ylab="RW")
+print(res_log)
+intercept_log = -res_log[1]/res_log[3]
+slope_log = -res_log[2]/res_log[3]
+abline(intercept_log,slope_log)
