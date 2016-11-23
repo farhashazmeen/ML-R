@@ -40,7 +40,42 @@
 
     \section*{Assignment 1}
 
-        ...
+        In this assignment we are tasked with predicting the sex of Australian Crabs given their carapace length and the rear width. For this purpose we will be using
+        Linear Discriminant Analyis (LDA) using Maximum Likelihood Estimation for predicting the unknown classification parameters. The first step involves plotting the
+        data in order to determine if the data would be linearly separable into different categories (male and female in this case). This plot can be found in below in
+        Figure~\ref{fig:crabs}.
+
+        \begin{figure}
+          \centering
+          \caption{Sex Classification of Australian Crabs}
+          \label{fig:crabs}
+          \includegraphics[width=0.5\textwidth]{share/crabs.eps}
+        \end{figure}
+
+        Our next task is to visualize the decision boundary between the different classifications. Since this is not already implemented by a package in R, we have to
+        develop our own LDA method. A LDA can be implemented by comparing Linear Discriminant Functions (LDF) with each other, one for each corresponding class. In practice
+        this means, since LDF is implemented with a likelihood function, one can assume that by applying predictor features to the function, the result would yield some indication
+        of how likely this observation can be classified as the label corresponding to that LDF. An LDF can be described in the following way:
+
+        \begin{equation} \label{eq:lda}
+          \begin{split}
+            \delta_k(x) &=  w_1 - b_1 \\
+            w_1 &= x^{T}\Sigma^{-1}\mu_k, \\
+            b_1 &= \frac{1}{2}\mu_k^{T}\Sigma^{-1}\mu_k+log\pi_k
+          \end{split}
+        \end{equation}
+
+        After calculating the parameters for both labels (male and female) using the Equation~\ref{eq:lda} above, we can find the intercept and slope of the decision boundary
+        separating both of these classes. This is done by simply subtracting each coefficient from each other, thereafter plotting this in Figure~\ref{fig:boundary}. Intuitively this
+        is a short method of comparing likelihood of classes given feature predictors.     
+
+        \begin{figure}
+          \centering
+          \caption{Sex Classification of Australian Crabs}
+          \label{fig:boundary}
+          \includegraphics[width=0.5\textwidth]{share/boundary.eps}
+        \end{figure}
+
 
     \section*{Assignment 2}
 
