@@ -75,11 +75,16 @@
           \label{fig:boundary}
           \includegraphics[width=0.5\textwidth]{share/boundary.eps}
         \end{figure}
-
+       The final part is to compare the result received by implementing the LDA method with the result from using logistic regression. In r, there is package for this called \textit{glm}. 
+	   The function \textit{glm()} returns a vector containing the coefficients including the intersection. The result can be seen in figure \ref{fig:LR}. Ass the observer can see, there 
+	   is no significant difference between the result of the method, at least when it come to classify the sample observations. 
 
     \section*{Assignment 2}
-
-        ...
+	This assignment revolved around classification of the credit score of clients. The response depended on some other factors commonly linked with what lenders evaluate before giving credit. 
+	The credit score of clients could be divided simply in good or bad.\newline
+    The methods that is appropriate for this are prediction through a decision tree or a naive Bayesian model. The first model to evaluate is the decision tree. A decision tree simply create  
+	model that depending on the value of some attributes can predict the response. The attributes is ranked in a tree form, where the more definitive attributes tend to be at the top. When the 
+	the model is used for prediction the algorithm simply traverse the tree and following which path corresponds to the values for the corresponding attribute.
 
     \nocite{*} % No warnings.
     \bibliographystyle{alpha}
