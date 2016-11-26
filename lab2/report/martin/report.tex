@@ -34,13 +34,20 @@ First all the combinations of features a iterated through.
 \end{equation} 
 \( \mathbf{A} \) in the equation above represents all the permutations of column index for the response variable. Each of theses combinations are sent to the \textit{k-fold cross validation} where the data is split into  \( \mathit{K} \)  parts of equal size. The  \( \mathit{K} \) are then iterated through and each data subset is used as testing data with the other \( \mathit{K} -1 \) sets as training data. The \textit{k-fold cross validation} uses the \textit{linear regression} with \textit{ordinary least squares} estimator.  The produced predictions are then error checked with the \textit{sum of squared error} 
 \begin{equation}
-  \sum _{i = 1} ^{n} (\hat{y}_i - y_i), n = nrow(y)
+  \sum _{i = 1} ^{n} (\hat{y}_i - y_i)^2, n = nrow(y)
 \end{equation} 
 for fold \( \mathit{K} \). After all the \( \mathit{K} \) folds for a given combination of features are calculated, the mean of all fold errors are calculated and returned as the final error value for the feature combination.
 \begin{equation}
-\frac{1}{\mathit{K}}\sum_{k = 1}^{\mathit{K}} ( \sum _{i = 1} ^{n} (\hat{y}_i - y_i))
+  s \in \{1,...,n\}\\
+\end{equation}
+where $s$ symbolizes a set of indexes. We then create all combinations of indexes from 1 to $2^n1-1$ (because we don't need the empty feature set).
+\begin{equation}
+  \mathbf{A} = \{s_1,s_2,...,s_{2^n-1}\}\\
+\end{equation}
+\begin{equation}
+  \bigcap_{i = 1}^{|\mathbf{A}|}{(s_i)} = \emptyset
 \end{equation} 
-where \( \mathit{K} = |folds|\) and \(n = |y|\).
+where \( \mathit{K} = |folds|\) and \(n = |y|\). 
 
 In the figure below the mean error for a given number of selected features can be shown. 
 
