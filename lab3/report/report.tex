@@ -86,6 +86,69 @@
 	model that depending on the value of some attributes can predict the response. The attributes is ranked in a tree form, where the more definitive attributes tend to be at the top. When the 
 	the model is used for prediction the algorithm simply traverse the tree and following which path corresponds to the values for the corresponding attribute.
 
+	The sample observations are randomly split into three parts with the size:
+	\begin{equation}
+		\left | testing \right | = \frac{\left | data \right |}{2}
+	\end{equation}
+	\begin{equation}
+		 \left | training \right | = \frac{\left | data \right |}{4}
+	\end{equation}
+	\begin{equation}
+	 \left | validation \right | = \frac{\left | data \right |}{4}
+	\end{equation}
+
+	\subsection{Decision tree}
+
+	The \textit{training} set is used to train two decision tree models. One with \textit{deviance} and one with \textit{gini index} as metric. The resulting trees can be observed in the figures \ref{fig:deviance tree}/\ref{fig:gini tree} respectively.
+	\begin{figure}
+	    \centering
+		\includegraphics[width=0.5\textwidth]{share/deviance_tree.png}  
+		\caption{\textit{Deviance} decision tree.\label{fig:deviance tree}}
+	\end{figure}
+	\begin{figure}
+	    \centering
+		\includegraphics[width=0.5\textwidth]{share/gini_tree.png}  
+		\caption{\textit{gini index} decision tree.\label{fig:gini tree}}
+    \end{figure}
+    The \textit{gini index} tree have significantly increased complexity compared to the \textit{deviance} and, when predicting the \textit{testing} data slightly higher misclassification rate.
+	\begin{verbatim}
+	deviance model fitness
+	       predicted
+	       bad good
+	  bad   29   17
+	  good  45  159
+	misclassification rate: 0.248
+	\end{verbatim}
+	\begin{verbatim}
+	gini model fitness
+	       predicted
+	       bad good
+	  bad   24   26
+	  good  50  150
+	misclassification rate: 0.304
+	\end{verbatim}
+	The \textit{deviance} model is decided to be the better model.
+
+	In order to determine the best max tree depth of the \textit{deviance} model we iterates through all depths between 2 and 15.
+	\begin{figure}
+	\centering
+	\begin{minipage}[]{0.5\textwidth}
+	  \includegraphics[width=\textwidth]{share/depth_tree.png}  
+	  \caption{deviance for different max tree depths.\label{fig:tree_depth}}
+	 \end{minipage}
+	\end{figure}
+	The \textit{red} line indicates deviance of the training data and the \textit{blue} line, the validation data. Tree depth of 4 results in the least deviance for the validation data. With a max tree depth of 4 the following classification table is produced.
+	\begin{verbatim}
+	optimal depth deviance fitness
+	       predicted
+	       bad good
+	  bad   20   59
+	  good   9  162
+	misclassification rate: 0.272
+	\end{verbatim}
+
+	\subsection{Naive Bayes}
+    
     \nocite{*} % No warnings.
     \bibliographystyle{alpha}
     \bibliography{report}

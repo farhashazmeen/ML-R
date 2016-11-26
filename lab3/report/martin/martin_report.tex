@@ -121,6 +121,7 @@ misclassification rate: 0.304
 \end{verbatim}
  \end{minipage}
 
+In order to determine the best max tree depth of the \textit{deviance} model we iterates through all depths between 2 and 15.
 \begin{figure}[H]
 \centering
 \begin{minipage}[]{0.5\textwidth}
@@ -128,7 +129,7 @@ misclassification rate: 0.304
   \caption{deviance for different max tree depths.\label{fig:logit_plot}}
  \end{minipage}
 \end{figure}
-The \textit{red} line indicates deviance of the training data and the \textit{blue} line, the validation data.
+The \textit{red} line indicates deviance of the training data and the \textit{blue} line, the validation data. Tree depth of 4 results in the least deviance for the training data.
 
 \begin{verbatim}
 optimal depth deviance fitness
