@@ -167,9 +167,9 @@
 
         Now we proceed to fit another model with the same problem as before, but using the \emph{Na{\"\i}ve Bayes classifier} instead, which basically assumes that all \emph{features} are independent of each other, and don't produce a conditional chain of dependencies, essentially following the properties: $p(C_k | x_1, x_2, ..., x_n) \propto p(x_i | C_k)$, proportional to $x_i$.
 
-        Under lines \texttt{25-33} in Listing~\ref{lst:bayes} we fit the model with \texttt{e1071}'s \texttt{naiveBayes} \emph{classification}, and produce the \emph{confusion matrices} and \emph{missclassifications} below for both the \emph{training} and the \emph{testing data sets}, which are quite different from decision trees.
+        Under lines \texttt{25-33} in Listing~\ref{lst:bayes} we fit the model with \texttt{e1071}'s \texttt{naiveBayes} \emph{classification}, and produce the \emph{confusion matrices} and \emph{misclassifications} below for both the \emph{training} and the \emph{testing data sets}, which are quite different from decision trees.
 
-        \emph{Missclassification:} \emph{train} = 0.300 \& \emph{test} = 0.306.
+        \emph{Misclassification:} \emph{train} = 0.300 \& \emph{test} = 0.306.
 
 
         \begin{table}[h]
@@ -199,9 +199,9 @@
         \label{table:bayes}
         \end{table}
 
-        It seems that in this case, \emph{Na{\"\i}ve Bayes} performs worse than \emph{decision trees} since the missclassification rate is quite a bit higher and gives a lot more false negatives and false positives as seen in the confusion matrices above. One possible cause for this is that the model isn't being penalized enough for making the wrong prediction, we need to guide it.
+        It seems that in this case, \emph{Na{\"\i}ve Bayes} performs worse than \emph{decision trees} since the misclassification rate is quite a bit higher and gives a lot more false negatives and false positives as seen in the confusion matrices above. One possible cause for this is that the model isn't being penalized enough for making the wrong prediction, we need to guide it.
 
-        Now, let's assume that we are given a \emph{loss matrix}, a way of \emph{penalizing} the \emph{predictor} to apply weight to certain false predictions, which in this case is $L = \left( \begin{smallmatrix}0&1\\10&0\end{smallmatrix} \right)$. Doing this in lines \texttt{35-52} within Listing~\ref{lst:bayes} results in a prediction giving the \emph{confusion matrix} below and missclassifications of train = 0.274 and test = 0.278. These missclassifications are a lot lower than those in the normal ``lossless'' model. The reason why this happens is because the cost of doing a faulty classification is highly penalized in one case (while the other isn't penalized as much), this is a underlying reason for these results.
+        Now, let's assume that we are given a \emph{loss matrix}, a way of \emph{penalizing} the \emph{predictor} to apply weight to certain false predictions, which in this case is $L = \left( \begin{smallmatrix}0&1\\10&0\end{smallmatrix} \right)$. Doing this in lines \texttt{35-52} within Listing~\ref{lst:bayes} results in a prediction giving the \emph{confusion matrix} below and misclassifications of train = 0.274 and test = 0.278. These misclassifications are a lot lower than those in the normal ``lossless'' model. The reason why this happens is because the cost of doing a faulty classification is highly penalized in one case (while the other isn't penalized as much), this is a underlying reason for these results.
 
 
         \begin{table}[h]
@@ -233,7 +233,7 @@
 
         \section*{Contributions}
             \begin{itemize}
-                \item{\textbf{Martin Estgren:} contributed several sections in \emph{Assignment 2}, most notably \emph{Decision Trees} and all of the \emph{Figures} there.}
+                \item{\textbf{Martin Estgren:} contributed several sections in \emph{Assignment 2}, most notably \emph{Decision Trees} and all of the \emph{Figures} there. He also contributed code for the same part of \emph{Assignment 2}.}
                 \item{\textbf{Erik S. V. Jansson:} assisted in writing parts of \emph{Assignment 1} along with \emph{Sebastian} and also wrote the section on \emph{Naive Bayes classifiers}.}
                 \item{\textbf{Sebastian Maghsoudi:} contributed by writing most of the theory and explanations in \emph{Assignment 1} and presenting Equation~\ref{lst:lda}}
             \end{itemize}
@@ -246,5 +246,6 @@
 
     \lstinputlisting[caption={Na{\"\i}ve Bayes Part of Assignment 2},label={lst:bayes}]{../share/bayes.r}
     \lstinputlisting[caption={Linear Discriminant Analysis Assignment},label={lst:lda}]{../share/lda.r}
+    \lstinputlisting[caption={Decision Tree Part of Assignment 2},label={lst:trees}]{../share/trees.r}
 
 \end{document}
