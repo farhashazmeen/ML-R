@@ -43,9 +43,10 @@
         In this assignment we are tasked with predicting the sex of Australian Crabs given their carapace length and the rear width. For this purpose we will be using
         Linear Discriminant Analyis (LDA) using Maximum Likelihood Estimation for predicting the unknown classification parameters. The first step involves plotting the
         data in order to determine if the data would be linearly separable into different categories (male and female in this case). This plot can be found in below in
-        Figure~\ref{fig:crabs}.
+        Figure~\ref{fig:crabs}. As can be seen, if we draw a line between these two colored classifications, we could do so such that most \emph{male} and \emph{female}
+        classes are separeted. We want to find this line, called the \emph{decision boundary}.
 
-        \begin{figure}
+        \begin{figure}[h!]
           \centering
           \caption{Sex Classification of Australian Crabs}
           \label{fig:crabs}
@@ -67,7 +68,8 @@
 
         After calculating the parameters for both labels (male and female) using the Equation~\ref{eq:lda} above, we can find the intercept and slope of the decision boundary
         separating both of these classes. This is done by simply subtracting each coefficient from each other, thereafter plotting this in Figure~\ref{fig:boundary}. Intuitively this
-        is a short method of comparing likelihood of classes given feature predictors.     
+        is a short method of comparing likelihood of classes given feature predictors. All of these calculations (more importantly, Equation~\ref{eq:lda} can be found in Listing~\ref{lst:lda},
+        where the function \texttt{lda} calculates the parameters $\mathbf{w}_m$ and $\mathbf{w}_f$, for each respective class, \emph{male} and \emph{female classes} in this case.
 
         \begin{figure}
           \centering
@@ -75,9 +77,18 @@
           \label{fig:boundary}
           \includegraphics[width=0.5\textwidth]{share/boundary.eps}
         \end{figure}
+
        The final part is to compare the result received by implementing the LDA method with the result from using logistic regression. In r, there is package for this called \textit{glm}. 
-	   The function \textit{glm()} returns a vector containing the coefficients including the intersection. The result can be seen in figure \ref{fig:LR}. Ass the observer can see, there 
-	   is no significant difference between the result of the method, at least when it come to classify the sample observations. 
+	   The function \textit{glm()} returns a vector containing the coefficients including the intersection. The result can be seen in figure \ref{fig:boundarylr}. As the observer can see, there
+	   is no significant difference between the result of the method, at least when it come to classify the sample observations, however, there are still a couple of observations which have been
+       missclassified.
+
+        \begin{figure}
+          \centering
+            \caption{Sex Classification of Australian Crabs}
+          \label{fig:boundarylr}
+          \includegraphics[width=0.5\textwidth]{share/boundarylr.eps}
+        \end{figure}
 
     \section*{Assignment 2}
 	This assignment revolved around classification of the credit score of clients. The response depended on some other factors commonly linked with what lenders evaluate before giving credit. 
@@ -132,7 +143,7 @@
 	In order to determine the best max tree depth of the \textit{deviance} model we iterates through all depths between 2 and 15.
 	\begin{figure}
 	\centering
-	\begin{minipage}[]{0.5\textwidth}
+	\begin{minipage}[]{0.3\textwidth}
 	  \includegraphics[width=\textwidth]{share/depth_tree.png}  
 	  \caption{deviance for different max tree depths.\label{fig:tree_depth}}
 	 \end{minipage}
@@ -147,19 +158,93 @@
 	misclassification rate: 0.272
 	\end{verbatim}
 	The misclassification rate is slightly lower than the \textit{gini index}. The tree is ploted in figure \ref{fig:best_subtree}.
-	\begin{figure}
+    \begin{figure}[h!]
 		\includegraphics[width=0.5\textwidth]{share/best_subtree.png}  
 		\caption{\textit{Deviance} decision tree at max depth 4.\label{fig:best_subtree}}
 	\end{figure}
 
 	\subsection{Naive Bayes}
-    
+
+        Now we proceed to fit another model with the same problem as before, but using the \emph{Na{\"\i}ve Bayes classifier} instead, which basically assumes that all \emph{features} are independent of each other, and don't produce a conditional chain of dependencies, essentially following the properties: $p(C_k | x_1, x_2, ..., x_n) \propto p(x_i | C_k)$, proportional to $x_i$.
+
+        Under lines \texttt{25-33} in Listing~\ref{lst:bayes} we fit the model with \texttt{e1071}'s \texttt{naiveBayes} \emph{classification}, and produce the \emph{confusion matrices} and \emph{missclassifications} below for both the \emph{training} and the \emph{testing data sets}, which are quite different from decision trees.
+
+        \emph{Missclassification:} \emph{train} = 0.300 \& \emph{test} = 0.306.
+
+
+        \begin{table}[h]
+        \begin{center}
+        \begin{tabular}{r|c|c|}
+            \multicolumn{1}{r}{\emph{train}}
+            &\multicolumn{1}{c}{\textbf{bad}}
+            &\multicolumn{1}{c}{\textbf{good}} \\
+            \cline{2-3}
+            \textbf{bad} & 95 & 98 \\
+            \cline{2-3}
+            \textbf{good} & 52 & 255 \\
+            \cline{2-3}
+        \end{tabular}
+        \begin{tabular}{r|c|c|}
+            \multicolumn{1}{r}{\emph{test}}
+            &\multicolumn{1}{c}{\textbf{bad}}
+            &\multicolumn{1}{c}{\textbf{good}} \\
+            \cline{2-3}
+            \textbf{bad} & 142 & 147 \\
+            \cline{2-3}
+            \textbf{good} & 83 & 378 \\
+            \cline{2-3}
+        \end{tabular}
+        \end{center}
+        \caption{Normal Na{\"\i}ve Bayes Confusion Matrix}
+        \label{table:bayes}
+        \end{table}
+
+        It seems that in this case, \emph{Na{\"\i}ve Bayes} performs worse than \emph{decision trees} since the missclassification rate is quite a bit higher and gives a lot more false negatives and false positives as seen in the confusion matrices above. One possible cause for this is that the model isn't being penalized enough for making the wrong prediction, we need to guide it.
+
+        Now, let's assume that we are given a \emph{loss matrix}, a way of \emph{penalizing} the \emph{predictor} to apply weight to certain false predictions, which in this case is $L = \left( \begin{smallmatrix}0&1\\10&0\end{smallmatrix} \right)$. Doing this in lines \texttt{35-52} within Listing~\ref{lst:bayes} results in a prediction giving the \emph{confusion matrix} below and missclassifications of train = 0.274 and test = 0.278. These missclassifications are a lot lower than those in the normal ``lossless'' model. The reason why this happens is because the cost of doing a faulty classification is highly penalized in one case (while the other isn't penalized as much), this is a underlying reason for these results.
+
+
+        \begin{table}[h]
+        \begin{center}
+        \begin{tabular}{r|c|c|}
+            \multicolumn{1}{r}{\emph{train}}
+            &\multicolumn{1}{c}{\textbf{bad}}
+            &\multicolumn{1}{c}{\textbf{good}} \\
+            \cline{2-3}
+            \textbf{bad} & 27 & 17 \\
+            \cline{2-3}
+            \textbf{good} & 120 & 336 \\
+            \cline{2-3}
+        \end{tabular}
+        \begin{tabular}{r|c|c|}
+            \multicolumn{1}{r}{\emph{test}}
+            &\multicolumn{1}{c}{\textbf{bad}}
+            &\multicolumn{1}{c}{\textbf{good}} \\
+            \cline{2-3}
+            \textbf{bad} & 40 & 24 \\
+            \cline{2-3}
+            \textbf{good} & 185 & 501 \\
+            \cline{2-3}
+        \end{tabular}
+        \end{center}
+        \caption{``Lossy'' Na{\"\i}ve Bayes Confusion Matrix}
+        \label{table:bayes10}
+        \end{table}
+
+        \section*{Contributions}
+            \begin{itemize}
+                \item{\textbf{Martin Estgren:} contributed several sections in \emph{Assignment 2}, most notably \emph{Decision Trees} and all of the \emph{Figures} there.}
+                \item{\textbf{Erik S. V. Jansson:} assisted in writing parts of \emph{Assignment 1} along with \emph{Sebastian} and also wrote the section on \emph{Naive Bayes classifiers}.}
+                \item{\textbf{Sebastian Maghsoudi:} contributed by writing most of the theory and explanations in \emph{Assignment 1} and presenting Equation~\ref{lst:lda}}
+            \end{itemize}
+
     \nocite{*} % No warnings.
     \bibliographystyle{alpha}
     \bibliography{report}
     \onecolumn \appendix
     \section*{Appendix}
 
-        ...
+    \lstinputlisting[caption={Na{\"\i}ve Bayes Part of Assignment 2},label={lst:bayes}]{../share/bayes.r}
+    \lstinputlisting[caption={Linear Discriminant Analysis Assignment},label={lst:lda}]{../share/lda.r}
 
 \end{document}
