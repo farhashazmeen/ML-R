@@ -67,9 +67,7 @@ The resulting plot can be seen below
   \caption{Plot of the raw data classified with LDA.\label{fig:lda_plot}}
  \end{minipage}
 \end{figure}
-The misclassification rate is 0 meaning the result is a close to perfect classification. 
-
-As observed in above, the LDA managed to perform a perfect classification. The next task involves using the built in \textit{logistic regression} classifier and examine its performance on the same data set.
+The LDA classifier managed to predict close to all of the observations correctly. As observed in above, the LDA managed to perform a perfect classification. The next task involves using the built in \textit{logistic regression} classifier and examine its performance on the same data set.
 
 Once again we extract the coefficients from the discriminant model and plot both the predicted result together with the \textit{discrimination bound}.
 
@@ -84,9 +82,7 @@ The \textit{logistic regression} also managed a similar classification of the gi
 
 \section{Assignment 2}
 
-In this assignment we are tasked with finding a classification model to find potential good customers who can manage their loans in a "good" way. To achieve this we use a data set with observations about how previous customers has manged their loans given a set of predictors. 
-
-We start by splitting the observations into 50,25,25 percent parts and try fitting a decision tree model based on \textit{deviance} and \textit{gini index}. Below are the confusion matrices and misclassification rates for the testing and training observations.
+In this assignment we are tasked with finding a classification model to find potential good customers who can manage their loans in a "good" way. To achieve this we use a data set with observations about how previous customers has manged their loans given a set of predictors. We start by splitting the observations into 50,25,25 percent parts and try fitting a decision tree model based on \textit{deviance} and \textit{gini index}. Below are the confusion matrices and misclassification rates for the testing and training observations.
 
 Below the two different types of description trees can be observed followed by the confusion matrices and miss classification rate.
 \begin{figure}[H]
@@ -100,7 +96,10 @@ Below the two different types of description trees can be observed followed by t
 \end{figure}
 The \textit{deviance} metric created a much less complex tree compared to the \textit{gini index}. This is mirrored in the misclassification ate where the \textit{deviance} creates the best result.
 
+\bigskip
+
 \begin{minipage}[]{0.49\textwidth}
+\centering
  \begin{verbatim}
 deviance model fitness
        predicted
@@ -121,7 +120,8 @@ misclassification rate: 0.304
 \end{verbatim}
  \end{minipage}
 
-In order to determine the best max tree depth of the \textit{deviance} model we iterates through all depths between 2 and 15.
+\bigskip
+In order to determine the best max tree depth of the \textit{deviance} model we iterates through all depths between 2 and max size of the model.
 \begin{figure}[H]
 \centering
 \begin{minipage}[]{0.5\textwidth}
@@ -166,10 +166,9 @@ bad   52   53
 good  22  123
 misclassification rate: 0.3
 \end{verbatim}
-We can observe about the same misclassification ratio as the decision tree model. The training data predictions have about the same level of misclassification as the testing set but with a higher level of true positives.
+The misclassification rate is around the same values as the decision tree model. The training data predictions have about the same level of misclassification as the testing set but with a higher level of true positives.
 
 We now apply a \textit{loss matrix} to the predictions of the model and compare the result to the result above. The loss matrix looks the following:
-
 \begin{equation}
   \begin{bmatrix}
   0 & 1\\ 
@@ -192,7 +191,7 @@ bad  18  10
 good 56  166
 misclassification rate:0.264
 \end{verbatim}
-The result indicates a improvement in performance of about 2-3 percent.
+The result indicates a improvement in performance of about 2-3 percent compared to the \textit{naive bayesian} model without loss matrix and about the same as the best decision tree classifier.
 
 \section{Appendix: A - Code assignment 1}
 
