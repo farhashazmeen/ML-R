@@ -168,13 +168,14 @@ misclassification rate: 0.3
 \end{verbatim}
 The misclassification rate is around the same values as the decision tree model. The training data predictions have about the same level of misclassification as the testing set but with a higher level of true positives.
 
-We now apply a \textit{loss matrix} to the predictions of the model and compare the result to the result above. The loss matrix looks the following:
+We now apply a \textit{loss matrix} to the predictions of the model and compare the result to the result above. The loss matrix can be observed below:
 \begin{equation}
   \begin{bmatrix}
   0 & 1\\ 
   10 & 0
   \end{bmatrix}
 \end{equation}
+The loss matrix will make \textit{false negatives} be classified much harsher compared to \textit{false positives}.
 
 \begin{verbatim}
 model fitness of the training set
@@ -182,16 +183,16 @@ model fitness of the training set
 truth bad good
 bad   27   17
 good  120  336
-misclassification rate: 0.274
+misclassification rate: 0.454
 
 model fitness of the testing set
       predicted
 truth bad good
 bad  18  10
 good 56  166
-misclassification rate:0.264
+misclassification rate: 0.432
 \end{verbatim}
-The result indicates a improvement in performance of about 2-3 percent compared to the \textit{naive bayesian} model without loss matrix and about the same as the best decision tree classifier.
+The result indicates a misclassification rate 0.12-0.15 worse than unweighted. If the loss matrix was flipped it would result in an improvement in performance of about 2-3 percent compared to the \textit{naive bayesian} model without loss matrix and about the same as the best decision tree classifier.
 
 \section{Appendix: A - Code assignment 1}
 
