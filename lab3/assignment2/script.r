@@ -55,6 +55,8 @@ print(f_table)
 print(1-sum(diag(f_table))/sum(f_table))
 plot(final)
 
+# Naive bayes ????
+
 bayes_model = naiveBayes(good_bad ~., data=train)
 
 test_yfit = predict(bayes_model, testing[,-ncol(testing)], type = "class")
@@ -76,8 +78,8 @@ bayes_model = naiveBayes( good_bad ~ ., data = train)
 test_yfit = predict(bayes_model, testing[,-ncol(testing)],type="raw")
 train_yfit = predict(bayes_model, train[,-ncol(train)], type="raw")
 
-test_yfit =  (test_yfit[, 1] / test_yfit[, 2]) > 1/10
-train_yfit =  (train_yfit[, 1] / train_yfit[, 2]) > 1/10
+test_yfit =  (test_yfit[, 2] / test_yfit[, 1]) > 1/10
+train_yfit =  (train_yfit[, 2] / train_yfit[, 1]) > 1/10
 
 naive_table = table(test_yfit,testing$good_bad)
 naive_table_train = table(train_yfit,train$good_bad)
