@@ -50,7 +50,7 @@
         \centering
         \caption{Plot of Metropolitan Rate \& Expenditure}
         \label{fig:state}
-        \includegraphics[width=0.5\textwidth]{example-image}
+        \includegraphics[width=0.5\textwidth]{share/A1_data.eps}
     \end{figure}
 
     The figure indicates that a linear model isn't suitable for predicting the target in this data set, no visible pattern can be observed.
@@ -72,7 +72,7 @@
         \centering
         \caption{Plot of Metropolitan Rate \& Predict Ex}
         \label{fig:predicted}
-        \includegraphics[width=0.5\textwidth]{example-image}
+        \includegraphics[width=0.5\textwidth]{share/A1_fit.eps}
     \end{figure}
 
     As can be seen, the predictions have less labels compared to the original data.
@@ -83,7 +83,7 @@
         \centering
         \caption{Histogram of the Residuals}
         \label{fig:residuals}
-        \includegraphics[width=0.5\textwidth]{example-image}
+        \includegraphics[width=0.5\textwidth]{share/A1_historgram_residuals.eps}
     \end{figure}
 
     \subsection*{Non-Parametric Bootstrap}
@@ -96,10 +96,12 @@
           \centering
           \caption{Confidence Bands of the Regression Tree Model}
           \label{fig:confidence_bands}
-          \includegraphics[width=0.5\textwidth]{example-image}
+          \includegraphics[width=0.5\textwidth]{share/A1_nonparametric.eps}
         \end{figure}
 
     \subsection*{Parametric Bootstrap}
+
+    The preconditions as opposed to parametric bootstrap is that we know the underlying given distribution. Assuming the expenditure label as a mean given a metropolitan rate it is possible to generate additional samples to be used in the bootstrapping process. This would also require a standard deviation, which in turn can be derived from the residual data. Plotting the confidence and prediction bands give Figure~\ref{fig:confpred_bands}. In contrast to the confidence bands, prediction bands concerns the entire distribution of the data.
 
         \begin{figure}[h!]
           \centering
@@ -108,16 +110,88 @@
           \includegraphics[width=0.5\textwidth]{example-image}
         \end{figure}
 
+    As can be seen in the figure, there are a pair of observations outside the prediction band. This is of course the result of using $95\%$ confidence.
+
     \section*{Assignment 2}
-    Fluff
+
+    In this assignment we are tasked with analyzing a data set containing observations regarding the \emph{viscosity levels} in relation with several \emph{near-infrared spectra} using \emph{PCA} and \emph{ICA} (\emph{Component Analysis Functions}).
+
     \subsection*{Principle Component Analysis}
+
+    \emph{Principal Component Analysis (PCA)} is used to reduce the number of dimensions in a data set by analyzing the variance that each feature contributes to the distribution. We conduct a PCA on the given data set, this gives us the histogram in Figure~\ref{fig:pcahist}.
+
+        \begin{figure}[h!]
+          \centering
+          \caption{Confidence/Prediction Bands Regression Tree Model}
+          \label{fig:pcahist}
+          \includegraphics[width=0.5\textwidth]{example-image}
+        \end{figure}
+
+    We observe that only two components are required to reach 99 \% cumulative variance, which are \emph{X750 (PC1)} and \emph{X752 (PC2)}. Afterwards, we plot the scores of the chosen principal components in Figure~\ref{fig:pcascore.eps}.
+
+        \begin{figure}[h!]
+          \centering
+          \caption{Confidence/Prediction Bands Regression Tree Model}
+          \label{fig:pcascore.eps}
+          \includegraphics[width=0.5\textwidth]{example-image}
+        \end{figure}
+
+        As can be seen, there is a large amount of independence between these two components. Now we plot the loadings, which indicates the correlation between components through proportional variance. This is done in Figures~\ref{fig:x750tp}, \ref{fig:x752tp}. The outliers indicates unusual diesel fuels.
+
+        \begin{figure}[h!]
+          \centering
+          \caption{Confidence/Prediction Bands Regression Tree Model}
+          \label{fig:x750tp.eps}
+          \includegraphics[width=0.5\textwidth]{example-image}
+        \end{figure}
+
+        \begin{figure}[h!]
+          \centering
+          \caption{Confidence/Prediction Bands Regression Tree Model}
+          \label{fig:x752tp.eps}
+          \includegraphics[width=0.5\textwidth]{example-image}
+        \end{figure}
+
+        Note the high correlation values in the same index on both plots.
+        
     \begin{itemize}
         \item Show the data 
         \item Show the PCA function (which components were chosen?)
         \item Show the trace plot and loadings plot
         \item Questions
     \end{itemize}
+
     \subsection*{Independent Component Analysis}
+
+    We perform the same analysis again, this time using the \emph{Independent component analysis} (ICA). In contrast to to PCA, where we assumed the features are correlated, we assume that they are independent. 
+
+    The loadings are calculated with the function \( \hat{W} = K \dot W \). We plot the traces for each column (the chosen components), the result can observed in Figures~\ref{x750ical.eps}, \ref{x752ical.eps}.
+
+    \begin{figure}[h!]
+        \centering
+        \caption{Confidence/Prediction Bands Regression Tree Model}
+        \label{fig:x750ical.eps}
+        \includegraphics[width=0.5\textwidth]{example-image}
+    \end{figure}
+
+    \begin{figure}[h!]
+        \centering
+        \caption{Confidence/Prediction Bands Regression Tree Model}
+        \label{fig:x752ical.eps}
+        \includegraphics[width=0.5\textwidth]{example-image}
+    \end{figure}
+
+    The results are quite similar to those found in PCA, but inverted.
+
+    We now plot the scores found by doing ICA, which can be seen in Figure~\ref{fig:icascores}.
+
+    \begin{figure}[h!]
+        \centering
+        \caption{Confidence/Prediction Bands Regression Tree Model}
+        \label{fig:icascores.eps}
+        \includegraphics[width=0.5\textwidth]{example-image}
+    \end{figure}
+
     \begin{itemize}
         \item Show the ICA function (which components were chosen?)
         \item Show the trace and loadings plot
