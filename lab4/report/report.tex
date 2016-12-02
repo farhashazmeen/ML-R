@@ -39,91 +39,103 @@
     \maketitle % Generate.
 
     \section*{Assignment 1}
-    This assignment involves examining a given data set called \emph{State}, which contains the observations about the \emph{population} \& \emph{economy} in different \emph{states}. We are primarily interested in the relationship between the \emph{metropolitan habitation rate (MET)} and the \emph{public expenditure per capita (EX)} for a given state.
 
-    \subsection{Raw data analysis}
+    This assignment involves examining a given data set called \emph{State}, which contains the observations about the \emph{population} \& \emph{economy} in different \emph{states}. We are primarily interested in the relationship between the \emph{metropolitan habitation rate (MET)} and the \emph{public expenditure per capita (EX)} for a state.
 
-    We first analyze the data by plotting the \emph{EX} target as a function of \emph{MET}. This plot can be observed in Figure~\ref{fig:state}.
+    \subsection*{Raw Data Analysis}
 
-        \begin{figure}[h!]
-          \centering
-          \caption{Plot of MET vs EX}
-          \label{fig:state}
-          \includegraphics[width=0.5\textwidth]{share/state.eps}
-        \end{figure}
+    We first analyze the data by plotting the \emph{EX} target as a function of \emph{MET}. These results can be observed in the plotted Figure~\ref{fig:state}, notice the spread of data.
+
+    \begin{figure}[h!]
+        \centering
+        \caption{Plot of Metropolitan Rate \& Expenditure}
+        \label{fig:state}
+        \includegraphics[width=0.5\textwidth]{example-image}
+    \end{figure}
 
     The figure indicates that a linear model isn't suitable for predicting the target in this data set, no visible pattern can be observed.
 
-    \subsection{Regression tree}
+    \subsection*{Regression Tree Analysis}
 
-    We have examined how a \emph{regression tree model} fits the data set using \emph{cross-validation} for finding the optimal number of \emph{leaves}. The plotted \emph{tree} from the fitted model can be seen in Figure~\ref{fig:tree.eps}. According to the cross-validation, the optimal number of leaves is 3, which we use to prune the full tree model and get the best optimal model. The predicted results can be seen in Figure~\ref{fig:predicted}.
+    We have examined how a \emph{regression tree model} fits the data set using \emph{cross-validation} for finding the optimal number of \emph{leaves}. The plotted \emph{tree} from the fitted model can be seen in Figure~\ref{fig:tree}.
 
-        \begin{figure}[h!]
-          \centering
-          \caption{Plot of MET vs Predicted EX}
-          \label{fig:state}
-          \includegraphics[width=0.5\textwidth]{share/predicted.eps}
-        \end{figure}
-        As can be seen, the predictions have less labels compared to the original data. 
+    \begin{figure}[h!]
+        \centering
+        \caption{Plotted Decision Tree for Model}
+        \label{fig:tree}
+        \includegraphics[width=0.5\textwidth]{example-image}
+    \end{figure}
 
-        The frequency of the models residuals are displayed in the histogram \ref{fig:residuals}.
+    According to the cross-validation, the optimal number of leaves is 3, which we use to prune the full tree model and get the best optimal model. The predicted results can be seen in Figure~\ref{fig:predicted}.
 
-        \begin{figure}[h!]
-          \centering
-          \caption{Histogram of residuals}
-          \label{fig:state}
-          \includegraphics[width=0.5\textwidth]{share/residuals.eps}
-        \end{figure}
-        \texbf{Fluff!}
+    \begin{figure}[h!]
+        \centering
+        \caption{Plot of Metropolitan Rate \& Predict Ex}
+        \label{fig:predicted}
+        \includegraphics[width=0.5\textwidth]{example-image}
+    \end{figure}
 
+    As can be seen, the predictions have less labels compared to the original data.
 
-    \subsection{non-parametric bootstrap}
-    
+    The frequency of the models residuals are displayed in the histogram \ref{fig:residuals}.
+
+    \begin{figure}[h!]
+        \centering
+        \caption{Histogram of the Residuals}
+        \label{fig:residuals}
+        \includegraphics[width=0.5\textwidth]{example-image}
+    \end{figure}
+
+    \subsection*{Non-Parametric Bootstrap}
+
     We examine the same data set with a \emph{regression tree model} with \emph{non-parametric bootstrap}. The model will follow the same structure as above but use \emph{bootstrapping} instead of \emph{cross-validation}.
-   
-    The \emph{non-parametric bootstrap} re-samples the given data set $1000$ times and estimate the model based on the \emph{regression tree model}. We examine the confidence band of the predicted model with a confidence level of 0.95 (fig \ref{fig:confidence_bound}).
-        
+
+    The \emph{non-parametric bootstrap} re-samples the given data set $1000$ times and estimate the model based on the \emph{regression tree model}. We examine the confidence band of the predicted model with a confidence level of 0.95 (fig \ref{fig:confidence_bands}).
+
         \begin{figure}[h!]
           \centering
-          \caption{Confidence bound of the regression tree model}
-          \label{fig:confidence_bound}
-          \includegraphics[width=0.5\textwidth]{share/confidence_bound.eps}
+          \caption{Confidence Bands of the Regression Tree Model}
+          \label{fig:confidence_bands}
+          \includegraphics[width=0.5\textwidth]{example-image}
         \end{figure}
-            
 
-    \subsection{parametric bootstrap}
-    \begin{itemize}
-        \item Show the parametric function
-        \item Show the bootstrap function
-        \item Show the confidence and prediction bounds
-        \item Questions
-    \end{itemize}
+    \subsection*{Parametric Bootstrap}
+
+        \begin{figure}[h!]
+          \centering
+          \caption{Confidence/Prediction Bands Regression Tree Model}
+          \label{fig:confpred_bands}
+          \includegraphics[width=0.5\textwidth]{example-image}
+        \end{figure}
+
     \section*{Assignment 2}
     Fluff
-    \subsection{Principle component analysis}
+    \subsection*{Principle Component Analysis}
     \begin{itemize}
         \item Show the data 
         \item Show the PCA function (which components were chosen?)
         \item Show the trace plot and loadings plot
         \item Questions
     \end{itemize}
-    \subsection{Independent component analysis}
+    \subsection*{Independent Component Analysis}
     \begin{itemize}
         \item Show the ICA function (which components were chosen?)
         \item Show the trace and loadings plot
         \item Questions
     \end{itemize}
-    \subsection{Cross validation for PCA}
+    \subsection*{PCA Cross-Validation}
     \begin{itemize}
         \item Show the cross validation function
         \item Show the result?
         \item Questions
     \end{itemize}
+
+    \section*{Contributions}
+
     \nocite{*} % No warnings.
     \bibliographystyle{alpha}
     \bibliography{report}
     \onecolumn \appendix
     \section*{Appendix}
-
 
 \end{document}
