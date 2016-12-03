@@ -13,17 +13,36 @@ fit.cv = cv.tree(fit)
 best_k = fit.cv$size[which.min(fit.cv$dev)]
 optimal_tree = prune.tree(fit, best=best_k)
 
-#plot(optimal_tree)
-#text(optimal_tree)
+setEPS()
+postscript("A1_tree.eps")
+plot(optimal_tree)
+text(optimal_tree)
+dev.off()
 
 predictions = predict(optimal_tree, newdata=data)
 
 fig_data = data.frame(x = data$MET, pred = predictions, orig = data$EX)
-fig = ggplot(fig_data, aes(x, pred, orig) , xlab = "Metropolitan" , ylab = "Expendature")
-fig = fig + geom_point(aes(x,orig), colour = "#FF1111") + geom_point(aes(x, pred))
+fig = ggplot(fig_data, aes(x, pred, orig)) + 
+  geom_point(aes(x,orig), colour = "#FF1111") +
+#  geom_point(aes(x, pred)) +
+  labs(x = "Metropolitan") +
+  labs(y = "Expendature")
 print(fig)
+ggsave(file="A1_data.eps")
 
+fig_data = data.frame(x = data$MET, pred = predictions, orig = data$EX)
+fig = ggplot(fig_data, aes(x, pred, orig)) + 
+  geom_point(aes(x,orig), colour = "#FF1111") +
+  geom_point(aes(x, pred)) +
+  labs(x = "Metropolitan") +
+  labs(y = "Expendature")
+print(fig)
+ggsave(file="A1_fit.eps")
+
+setEPS()
+postscript("A1_histogram_residuals.eps")
 hist(residuals(optimal_tree))
+dev.off()
 
  nonparama = function(data,index){
      sample = data[index,]
@@ -43,14 +62,18 @@ hist(residuals(optimal_tree))
 plot(nonparam_boot)
 
 fig_data = data.frame(orig = data$EX, x=data$MET, pred=predictions, upper=confidence_bound$point[1,], lower=confidence_bound$point[2,])
-fig = ggplot(fig_data, aes(x,predictions,upper,lower), xlab = "Metropolitan" , ylab = "Predicted Expendature")
+fig = ggplot(fig_data, aes(x,predictions,upper,lower))
 fig = fig +
     geom_point(aes(x, pred)) + 
     geom_point(aes(x, orig),colour="#CC1111") + 
     geom_line(aes(x,upper)) +
     geom_line(aes(x,lower)) +
-    geom_ribbon(aes(x = x, ymin=lower, ymax=upper), alpha=0.05)
+    geom_ribbon(aes(x = x, ymin=lower, ymax=upper), alpha=0.05) +
+    labs(x = "Metropolitan") +
+    labs(y = "Expendature")
 print(fig)
+ggsave(file="A1_nonparametric.eps")
+
 # lines(data$MET,confidence_bound$point[1,], col="Red")
 # lines(data$MET,confidence_bound$point[2,], col="Red")
 
@@ -100,7 +123,10 @@ fig_data = data.frame(orig = data$EX, x=data$MET, pred=predictions, upper_c=conf
     geom_ribbon(aes(x = x, ymin=lower_c, ymax=upper_c), alpha=0.05, colour = "#110011")+
     geom_line(aes(x,upper_p)) +
     geom_line(aes(x,lower_p))+
-    geom_ribbon(aes(x = x, ymin=lower_p, ymax=upper_p), alpha=0.05)
-    
+    geom_ribbon(aes(x = x, ymin=lower_p, ymax=upper_p), alpha=0.05) +
+    labs(x = "Metropolitan") +
+    labs(y = "Expendature")
   print(fig)
+  ggsave(file="A1_parametric.eps")
+  
  
