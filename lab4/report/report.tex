@@ -54,11 +54,13 @@
             \includegraphics[width=0.5\textwidth]{share/A1_data.eps}
         \end{figure}
 
-        The figure indicates that a linear model isn't suitable for predicting the target in this data set, no visible pattern can be observed.
+        The figure indicates that a linear model isn't suitable for predicting the target in this data set, no easily visible pattern can be observed in this plot. Since we are tasked with using \emph{regression trees} in this assignment, the first step is fit such a model with it, then finding the optimal number of leaves.
 
     \subsection*{Regression Tree Analysis}
 
-        We have examined how a \emph{regression tree model} fits the data set using \emph{cross-validation} for finding the optimal number of \emph{leaves}. The plotted \emph{tree} from the fitted model can be seen in Figure~\ref{fig:tree}.
+        We have examined how a \emph{regression tree model} fits the data set using \emph{cross-validation} for finding the optimal number of \emph{leaves}. The plotted \emph{decision tree} from the fitted model can be seen in Figure~\ref{fig:tree}. This model was fitted with the following piece of \emph{R} code:
+
+        \lstinputlisting[firstline=10,lastline=14]{../share/assignment1.r}
 
         \begin{figure}[h!]
             \centering
@@ -67,7 +69,7 @@
             \includegraphics[width=0.5\textwidth]{example-image}
         \end{figure}
 
-        According to the cross-validation, the optimal number of leaves is 3, which we use to prune the full tree model and get the best optimal model. The predicted results can be seen in Figure~\ref{fig:predicted}.
+        According to the cross-validation, the optimal number of leaves is 3, which we use to prune the full tree model and get the best optimal model. These predicted results of the best model are in Figure~\ref{fig:predicted}.
 
         \begin{figure}[h!]
             \centering

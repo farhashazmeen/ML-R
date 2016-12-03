@@ -2,13 +2,13 @@ library(tree)
 library(boot)
 library(ggplot2)
 library(reshape2)
+
 set.seed(12345)
 data = read.csv2("State.csv", header = TRUE)
 data = data[order(data$MET),]
 
-controll = tree.control(nrow(data), minsize = 8)
-fit = tree( EX ~ MET, data, control = controll)
-
+controll = tree.control(nrow(data), minsize=8)
+fit = tree(EX~MET, data, control=controll)
 fit.cv = cv.tree(fit)
 best_k = fit.cv$size[which.min(fit.cv$dev)]
 optimal_tree = prune.tree(fit, best=best_k)
