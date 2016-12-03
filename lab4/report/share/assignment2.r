@@ -1,7 +1,6 @@
 library("pls")
 library("ggplot2")
 library("fastICA")
-library("reshape2")
 
 setEPS() # Enables saving EPS format.
 spectra <- read.csv2("NIRSpectra.csv")
@@ -10,7 +9,6 @@ yspectra <- spectra[,ncol(spectra)]
 principal_comp <- prcomp(xspectra)
 lambda <- principal_comp$sdev^2
 
-# Notice both X750, X752.
 cairo_ps("screeplot.eps")
 screeplot(principal_comp,
           ncol(xspectra))
@@ -34,16 +32,14 @@ print(qplot(1:length(x750loadings),
             x750loadings, xlab="i",
             ylab="X750 Loadings"))
 dev.off()
-
 cairo_ps("x752loadings.eps")
 print(qplot(1:length(x752loadings),
             x752loadings, xlab="i",
             ylab="X752 Loadings"))
 dev.off()
 
-set.seed(12345) # But WHY?!?!?!??!?!?!?!
+set.seed(12345)
 independent_comp <- fastICA(xspectra, 2)
-
 W <- independent_comp$K %*% independent_comp$W
 x750whitening <- W[,1] # Un-mixed and whitened
 x752whitening <- W[,2] # Un-mixed and whitened
@@ -53,7 +49,6 @@ print(qplot(1:length(x750whitening),
             x750whitening, xlab="i",
             ylab="X750 Inverse Loadings"))
 dev.off()
-
 cairo_ps("x752traceplot.eps")
 print(qplot(1:length(x752whitening),
             x752whitening, xlab="i",
@@ -70,7 +65,7 @@ dev.off()
 set.seed(12345)
 principal_compcv <- pcr(Viscosity ~ ., data = spectra,
                         validation = "CV")
-# cairo_ps("pcacv.eps")
+cairo_ps("pcacv.eps")
 validationplot(principal_compcv,
                val.type = "MS")
-# dev.off()
+dev.off()

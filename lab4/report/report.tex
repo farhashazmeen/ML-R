@@ -66,7 +66,7 @@
             \centering
             \caption{Plotted Decision Tree for Model}
             \label{fig:tree}
-            \includegraphics[width=0.5\textwidth]{share/A1_tree.eps}
+            \includegraphics[width=0.4\textwidth]{share/A1_tree.eps}
         \end{figure}
 
         According to the cross-validation, the optimal number of leaves is 3, which we use to prune the full tree model and get the best optimal model. These predicted results of the best model are in Figure~\ref{fig:predicted}.
@@ -78,48 +78,60 @@
             \includegraphics[width=0.5\textwidth]{share/A1_fit.eps}
         \end{figure}
 
-        As can be seen, the predictions have less labels compared to the original data.
+        Notice how the above results indicate that the predictions (black) have produced less labels than the original data (in red). These correspond to the three resulting leaves derived from cross-validation. Also, each label is roughly located around the mean of the raw data (that has been divided in ``buckets'').
 
-        The frequency of the models residuals are displayed in the histogram \ref{fig:residuals}.
+        Finally, the frequency of the model's residuals are displayed in the Figure~\ref{fig:residuals} below, derived by using:
+
+        \lstinputlisting[firstline=22,lastline=22]{../share/assignment1.r}
 
         \begin{figure}[h!]
             \centering
             \caption{Histogram of the Residuals}
             \label{fig:residuals}
-            \includegraphics[width=0.5\textwidth]{share/A1_historgram_residuals.eps}
+            \includegraphics[width=0.4\textwidth]{share/A1_historgram_residuals.eps}
         \end{figure}
+
+        Preferably, the above distribution should be a \emph{bell curve} around 0, meaning predictions weren't good.
 
     \subsection*{Non-Parametric Bootstrap}
 
-        We examine the same data set with a \emph{regression tree model} with \emph{non-parametric bootstrap}. The model will follow the same structure as above but use \emph{bootstrapping} instead of \emph{cross-validation}.
+        We explore the same data set as before, still being modeled with a \emph{regression tree model} using the \emph{non-parametric bootstrap}. \emph{Bootstrapping} is used to estimate the properties of an estimator by sampling from an approximated distribution. In the case of \emph{non-parametric bootstrapping}, the underlying distribution is assumed to \emph{not} be known, and the data is instead re-sampled with replacement. The estimated distribution is then given by $\hat{f}(D_1), \hat{f}(D_2), ..., \hat{f}(D_B)$, estimator $\hat{f}$ and data $D_i$.
 
-        The \emph{non-parametric bootstrap} re-samples the given data set $1000$ times and estimate the model based on the \emph{regression tree model}. We examine the confidence band of the predicted model with a confidence level of 0.95 (fig \ref{fig:confidence_bands}).
+        For our data set, we re-sample 1000 times using the \emph{non-parametric bootstrapping} function \texttt{boot}, for a confidence level of 95 \% (which is an $\alpha = 5\%$). By retrieving the \emph{confidence intervals} for each $x_i$ and plotting them, we get the \emph{confidence bands} of the model. Which can be seen in a Figure~\ref{fig:confidence_bands} below. Listing~\ref{lst:assignment1} does the \emph{non-parametric bootstrapping} in:
+
+        \lstinputlisting[firstline=25,lastline=34]{../share/assignment1.r}
 
         \begin{figure}[h!]
             \centering
-            \caption{Confidence Bands of the Regression Tree Model}
+            \caption{Confidence Bands of Regression Tree}
             \label{fig:confidence_bands}
             \includegraphics[width=0.5\textwidth]{share/A1_nonparametric.eps}
         \end{figure}
 
+        Notice how several observations are outside confidence band derived from our regression tree model.
+
     \subsection*{Parametric Bootstrap}
 
-        The preconditions as opposed to parametric bootstrap is that we know the underlying given distribution. Assuming the expenditure label as a mean given a metropolitan rate it is possible to generate additional samples to be used in the bootstrapping process. This would also require a standard deviation, which in turn can be derived from the residual data. Plotting the confidence and prediction bands give Figure~\ref{fig:confpred_bands}. In contrast to the confidence bands, prediction bands concerns the entire distribution of the data.
+        Now the preconditions have changed as opposed to the \emph{non-parametric bootstrap}, since the underlying distribution is now ``known'' to be: $Y \sim \mathcal{N}(\mu_i, \sigma^2)$. Having the distribution allows us to sample from it, giving us the concept of \emph{parametric bootstrapping}. Similarly, the number of samples to be taken into consideration has been chosen to be 1000 again, with a confidence level of 95 \%. Plotting the confidence and prediction bands using \emph{parametric bootstrap} gives Figure~\ref{fig:confpred_bands}. The ``tighter'' band is the \emph{confidence band} while the more relaxed one is the \emph{prediction band}. The following \emph{R} source produces this:
+
+        \lstinputlisting[firstline=72,lastline=75]{../share/assignment1.r}
 
         \begin{figure}[h!]
             \centering
-            \caption{Confidence/Prediction Bands Regression Tree Model}
+            \caption{Confidence/Prediction Bands of the Tree}
             \label{fig:confpred_bands}
-            \includegraphics[width=0.5\textwidth]{share/A1_parametric.eps}
+            \includegraphics[width=0.46\textwidth]{share/A1_parametric.eps}
         \end{figure}
 
-        As can be seen in the figure, there are a pair of observations outside the prediction band. This is of course the result of using $95\%$ confidence.
+        As can be noted in the figure above, there are a couple of observations outside the prediction band. This is caused because of the $95 \%$ level of confidence imposed on the prediction band. It seems reasonable that $5 \%$ is outside the prediction band. However, this tells us that our model predicts $95 \%$ of the data correctly, which seems a bit unrealistic. By referring back to the residual histogram, the assumption that the data is normally distributed is a bit of a stretch, at least given the current data set. \emph{Non-parametric bootstrapping} seems more suitable.
+
+        % As can be seen in the figure, there are a pair of observations outside the prediction band. This is of course the result of using $95\%$ confidence.
 
     \section*{Assignment 2}
 
         In this assignment we are tasked with analyzing a data set containing observations regarding the \emph{viscosity levels} in relation with several \emph{near-infrared spectra} using \emph{PCA} and \emph{ICA} (\emph{Component Analysis Functions}).
 
-    \subsection*{Principle Component Analysis}
+    \subsection*{Principal Component Analysis}
 
         \emph{Principal Component Analysis (PCA)} is used to reduce the number of dimensions in a data set by analyzing the variance that each feature contributes to the distribution. We conduct a PCA on the given data set, this gives us the histogram in Figure~\ref{fig:pcahist}.
 
