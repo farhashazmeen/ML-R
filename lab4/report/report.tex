@@ -191,19 +191,17 @@
 
     \subsection*{PCA Cross-Validation}
 
-        \begin{itemize}
-            \item Show the cross validation function
-            \item Show the result?
-            \item Questions
-        \end{itemize}
+ 		We perofm a \emph{Principal component regression} analsysis with \emph{cross validation} in order to examine the number of compponents that sould be seleceted. Below is the resulting plot (\ref{icascores}) of \emph{predicted mean-squared error} in relation to the number of components selected for the model.
 
         \begin{figure}[h!]
             \centering
             \caption{Confidence/Prediction Bands Regression Tree Model}
-            \label{fig:icascores}
+            \label{fig:viscosity}
             \includegraphics[width=0.5\textwidth]{share/A2_viscosity.eps}
         \end{figure}
 
+	We can observe from the figure how the MSEP is high when few components are selected and how the MSEP drasticly decreases around 8 components. The number of components with the lowest NSEO is around 20 and after that it slowly increases.
+	
     \section*{Contributions}
 
     \nocite{*} % No warnings.
