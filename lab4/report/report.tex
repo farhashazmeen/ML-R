@@ -66,7 +66,7 @@
             \centering
             \caption{Plotted Decision Tree for Model}
             \label{fig:tree}
-            \includegraphics[width=0.5\textwidth]{example-image}
+            \includegraphics[width=0.5\textwidth]{share/A1_tree.eps}
         \end{figure}
 
         According to the cross-validation, the optimal number of leaves is 3, which we use to prune the full tree model and get the best optimal model. These predicted results of the best model are in Figure~\ref{fig:predicted}.
@@ -110,7 +110,7 @@
             \centering
             \caption{Confidence/Prediction Bands Regression Tree Model}
             \label{fig:confpred_bands}
-            \includegraphics[width=0.5\textwidth]{example-image}
+            \includegraphics[width=0.5\textwidth]{share/A1_parametric.eps}
         \end{figure}
 
         As can be seen in the figure, there are a pair of observations outside the prediction band. This is of course the result of using $95\%$ confidence.
@@ -127,7 +127,7 @@
             \centering
             \caption{Confidence/Prediction Bands Regression Tree Model}
             \label{fig:pcahist}
-            \includegraphics[width=0.5\textwidth]{example-image}
+            \includegraphics[width=0.5\textwidth]{share/A2_pcahist.eps}
         \end{figure}
 
         We observe that only two components are required to reach 99 \% cumulative variance, which are \emph{X750 (PC1)} and \emph{X752 (PC2)}. Afterwards, we plot the scores of the chosen principal components in Figure~\ref{fig:pcascore.eps}.
@@ -135,8 +135,8 @@
         \begin{figure}[h!]
             \centering
             \caption{Confidence/Prediction Bands Regression Tree Model}
-            \label{fig:pcascore.eps}
-            \includegraphics[width=0.5\textwidth]{example-image}
+            \label{fig:pcascore}
+            \includegraphics[width=0.5\textwidth]{share/A2_pcascore.eps}
         \end{figure}
 
         As can be seen, there is a large amount of independence between these two components. Now we plot the loadings, which indicates the correlation between components through proportional variance. This is done in Figures~\ref{fig:x750tp}, \ref{fig:x752tp}. The outliers indicates unusual diesel fuels.
@@ -144,25 +144,19 @@
         \begin{figure}[h!]
             \centering
             \caption{Confidence/Prediction Bands Regression Tree Model}
-            \label{fig:x750tp.eps}
-            \includegraphics[width=0.5\textwidth]{example-image}
+            \label{fig:x750tp}
+            \includegraphics[width=0.5\textwidth]{share/A2_trace_PC1.eps}
         \end{figure}
 
         \begin{figure}[h!]
             \centering
             \caption{Confidence/Prediction Bands Regression Tree Model}
-            \label{fig:x752tp.eps}
-            \includegraphics[width=0.5\textwidth]{example-image}
+            \label{fig:x752tp}
+            \includegraphics[width=0.5\textwidth]{share/A2_trace_PC2.eps}
         \end{figure}
 
         Note the high correlation values in the same index on both plots.
 
-        \begin{itemize}
-            \item Show the data 
-            \item Show the PCA function (which components were chosen?)
-            \item Show the trace plot and loadings plot
-            \item Questions
-        \end{itemize}
 
     \subsection*{Independent Component Analysis}
 
@@ -173,15 +167,15 @@
         \begin{figure}[h!]
             \centering
             \caption{Confidence/Prediction Bands Regression Tree Model}
-            \label{fig:x750ical.eps}
-            \includegraphics[width=0.5\textwidth]{example-image}
+            \label{fig:x750ical}
+            \includegraphics[width=0.5\textwidth]{share/A2_trace_ICA1.eps}
         \end{figure}
 
         \begin{figure}[h!]
             \centering
             \caption{Confidence/Prediction Bands Regression Tree Model}
-            \label{fig:x752ical.eps}
-            \includegraphics[width=0.5\textwidth]{example-image}
+            \label{fig:x752ical}
+            \includegraphics[width=0.5\textwidth]{share/A2_trace_ICA2.eps}
         \end{figure}
 
         The results are quite similar to those found in PCA, but inverted.
@@ -191,15 +185,9 @@
         \begin{figure}[h!]
             \centering
             \caption{Confidence/Prediction Bands Regression Tree Model}
-            \label{fig:icascores.eps}
-            \includegraphics[width=0.5\textwidth]{example-image}
+            \label{fig:icascores}
+            \includegraphics[width=0.5\textwidth]{share/A2_icascore.eps}
         \end{figure}
-
-        \begin{itemize}
-            \item Show the ICA function (which components were chosen?)
-            \item Show the trace and loadings plot
-            \item Questions
-        \end{itemize}
 
     \subsection*{PCA Cross-Validation}
 
@@ -208,6 +196,13 @@
             \item Show the result?
             \item Questions
         \end{itemize}
+
+        \begin{figure}[h!]
+            \centering
+            \caption{Confidence/Prediction Bands Regression Tree Model}
+            \label{fig:icascores}
+            \includegraphics[width=0.5\textwidth]{share/A2_viscosity.eps}
+        \end{figure}
 
     \section*{Contributions}
 
