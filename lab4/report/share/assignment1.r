@@ -6,8 +6,8 @@ set.seed(12345)
 data = read.csv2("State.csv", header = TRUE)
 data = data[order(data$MET),]
 
-controll = tree.control(nrow(data), minsize=8)
-fit = tree(EX~MET, data, control=controll)
+control = tree.control(nrow(data), minsize=8)
+fit = tree(EX~MET, data, control=control)
 fit.cv = cv.tree(fit)
 best_k = fit.cv$size[which.min(fit.cv$dev)]
 optimal_tree = prune.tree(fit, best=best_k)
@@ -24,8 +24,8 @@ hist(residuals(optimal_tree))
  set.seed(12345)
  nonparama = function(data,index) {
      sample = data[index,]
-     controll = tree.control(nrow(sample), minsize = 8)
-     fit = tree( EX ~ MET, data=sample, control = controll)
+     control = tree.control(nrow(sample), minsize = 8)
+     fit = tree( EX ~ MET, data=sample, control = control)
      optimal_tree = prune.tree(fit, best=best_k)
      return(predict(optimal_tree, newdata=data))
  }
@@ -49,29 +49,29 @@ print(fig)
 
 set.seed(12345)
 parama_conf = function(data){
-  controll = tree.control(nrow(data), minsize = 8)
-  fit = tree( EX ~ MET, data=data, control = controll)
+  control = tree.control(nrow(data), minsize = 8)
+  fit = tree( EX ~ MET, data=data, control = control)
   optimal_tree = prune.tree(fit, best=best_k) 
   return(predict(optimal_tree, newdata=data))
 }
 
 parama_predic = function(data){
-  controll = tree.control(nrow(data), minsize = 8)
-  fit = tree( EX ~ MET, data=data, control = controll)
+  control = tree.control(nrow(data), minsize = 8)
+  fit = tree( EX ~ MET, data=data, control = control)
   optimal_tree = prune.tree(fit, best=best_k) 
   predictions = predict(optimal_tree, newdata=data)
   return(rnorm(nrow(data),predictions,sd(resid(fit))))
 }
 
-random_predictions = function(data, model){
+random_samples = function(data, model){
   sample = data.frame(MET=data$MET, EX=data$EX)
   sample$EX = rnorm(nrow(data), predict(model,newdata=data),sd(resid(model)))
   return(sample)
 }
 
-param_boot_conf = boot(data, statistic = parama_conf, R=1000, mle = optimal_tree, ran.gen = random_predictions, sim = "parametric")
+param_boot_conf = boot(data, statistic = parama_conf, R=1000, mle = optimal_tree, ran.gen = random_samples, sim = "parametric")
 confidence_bound_param = envelope(param_boot_conf, level=0.95)
-param_boot_pred = boot(data, statistic = parama_predic, R=1000, mle = optimal_tree, ran.gen = random_predictions, sim = "parametric")
+param_boot_pred = boot(data, statistic = parama_predic, R=1000, mle = optimal_tree, ran.gen = random_samples, sim = "parametric")
 prediction_bound_param = envelope(param_boot_pred, level=0.95)
 
 predictions = predict(optimal_tree,data)
