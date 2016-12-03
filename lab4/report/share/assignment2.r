@@ -4,7 +4,7 @@ library("fastICA")
 
 setEPS() # Enables saving EPS format.
 spectra <- read.csv2("NIRSpectra.csv")
-xspectra <- spectra[,-ncol(spectra)]
+xspectra <- scale(spectra[,-ncol(spectra)])
 yspectra <- spectra[,ncol(spectra)]
 principal_comp <- prcomp(xspectra)
 lambda <- principal_comp$sdev^2

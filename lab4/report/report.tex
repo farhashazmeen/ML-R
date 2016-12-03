@@ -54,7 +54,7 @@
             \includegraphics[width=0.5\textwidth]{share/A1_data.eps}
         \end{figure}
 
-        The figure indicates that a linear model isn't suitable for predicting the target in this data set, no easily visible pattern can be observed in this plot. Since we are tasked with using \emph{regression trees} in this assignment, the first step is fit such a model with it, then finding the optimal number of leaves.
+        The figure indicates that a linear model isn't suitable for predicting the target in this data set, no easily visible pattern can be observed in this plot. Since we are tasked with using \emph{regression trees} in this assignment, the first step is to fit such a model with it, then finding the optimal number of leaves.
 
     \subsection*{Regression Tree Analysis}
 
@@ -69,7 +69,7 @@
             \includegraphics[width=0.4\textwidth]{share/A1_tree.eps}
         \end{figure}
 
-        According to the cross-validation, the optimal number of leaves is 3, which we use to prune the full tree model and get the best optimal model. These predicted results of the best model are in Figure~\ref{fig:predicted}.
+        According to the cross-validation, the optimal number of leaves is 3, which we use to prune the full tree model and get the best optimal model. These predicted results of the best model can be seen in Figure~\ref{fig:predicted}.
 
         \begin{figure}[h!]
             \centering
@@ -103,12 +103,12 @@
 
         \begin{figure}[h!]
             \centering
-            \caption{Confidence Bands of Regression Tree}
+            \caption{Confidence Bands of Regression Tree with non-parametric bootstrap}
             \label{fig:confidence_bands}
             \includegraphics[width=0.5\textwidth]{share/A1_nonparametric.eps}
         \end{figure}
 
-        Notice how several observations are outside confidence band derived from our regression tree model.
+        Notice how several observations are outside the confidence band derived from our regression tree model.
 
     \subsection*{Parametric Bootstrap}
 
@@ -118,7 +118,7 @@
 
         \begin{figure}[h!]
             \centering
-            \caption{Confidence/Prediction Bands of the Tree}
+            \caption{Confidence/Prediction Bands Regression the Tree with parametric bootstrap}
             \label{fig:confpred_bands}
             \includegraphics[width=0.46\textwidth]{share/A1_parametric.eps}
         \end{figure}
@@ -129,7 +129,7 @@
 
     \section*{Assignment 2}
 
-        In this assignment we are tasked with analyzing a data set containing observations regarding the \emph{viscosity levels} in relation with several \emph{near-infrared spectra} using \emph{PCA} and \emph{ICA} (\emph{Component Analysis Functions}).
+        In this assignment we are tasked with analyzing a data set containing observations regarding different levels of \emph{viscosity} and \emph{near-infrared spectra} for many different \emph{diesel fuels} using \emph{PCA} and \emph{ICA} (\emph{Component Analysis Functions}).
 
     \subsection*{Principal Component Analysis}
 
@@ -137,85 +137,88 @@
 
         \begin{figure}[h!]
             \centering
-            \caption{Confidence/Prediction Bands Regression Tree Model}
+            \caption{PCA histogram of variance}
             \label{fig:pcahist}
             \includegraphics[width=0.5\textwidth]{share/A2_pcahist.eps}
         \end{figure}
 
-        We observe that only two components are required to reach 99 \% cumulative variance, which are \emph{X750 (PC1)} and \emph{X752 (PC2)}. Afterwards, we plot the scores of the chosen principal components in Figure~\ref{fig:pcascore.eps}.
+        We observe that only two components are required to reach 99 \% cumulative variance, which are \emph{X750 (PC1)} and \emph{X752 (PC2)}. Afterwards, we plot the scores of the chosen principal components in Figure~\ref{fig:pcascore}.
 
         \begin{figure}[h!]
             \centering
-            \caption{Confidence/Prediction Bands Regression Tree Model}
+            \caption{PCA score distribution}
             \label{fig:pcascore}
             \includegraphics[width=0.5\textwidth]{share/A2_pcascore.eps}
         \end{figure}
 
-        As can be seen, there is a large amount of independence between these two components. Now we plot the loadings, which indicates the correlation between components through proportional variance. This is done in Figures~\ref{fig:x750tp}, \ref{fig:x752tp}. The outliers indicates unusual diesel fuels.
+        As can be seen, there is a large amount of independence between these two components. The outliers indicates unusual diesel fuels. Now we plot the loadings, which indicates the correlation between components through proportional variance. This is done in Figures~\ref{fig:x750tp}, \ref{fig:x752tp}. 
 
         \begin{figure}[h!]
             \centering
-            \caption{Confidence/Prediction Bands Regression Tree Model}
+            \caption{Trace plot of PC1}
             \label{fig:x750tp}
             \includegraphics[width=0.5\textwidth]{share/A2_trace_PC1.eps}
         \end{figure}
 
         \begin{figure}[h!]
             \centering
-            \caption{Confidence/Prediction Bands Regression Tree Model}
+            \caption{Trace plot of PC2}
             \label{fig:x752tp}
             \includegraphics[width=0.5\textwidth]{share/A2_trace_PC2.eps}
         \end{figure}
 
-        Note the high correlation values in the same index on both plots.
+        Note the high correlation values in the same index on both plots. High value indicates higher correlation with the selected components. There are a couple of components which are relatively highly explained by the components extracted from the previous analysis. PC1 correlates highly with the first components and PC2 with the last ones. 
 
 
     \subsection*{Independent Component Analysis}
 
         We perform the same analysis again, this time using the \emph{Independent component analysis} (ICA). In contrast to to PCA, where we assumed the features are correlated, we assume that they are independent. 
 
-        The loadings are calculated with the function \( \hat{W} = K \dot W \). We plot the traces for each column (the chosen components), the result can observed in Figures~\ref{x750ical.eps}, \ref{x752ical.eps}.
+        The loadings are calculated with the function \( \hat{W} = K \dot W \). We plot the traces for each column (the chosen components), the result can observed in Figures~\ref{fig:x750ical}, \ref{fig:x752ical}.
 
         \begin{figure}[h!]
             \centering
-            \caption{Confidence/Prediction Bands Regression Tree Model}
+            \caption{Trace plot of ICA1}
             \label{fig:x750ical}
             \includegraphics[width=0.5\textwidth]{share/A2_trace_ICA1.eps}
         \end{figure}
 
         \begin{figure}[h!]
             \centering
-            \caption{Confidence/Prediction Bands Regression Tree Model}
+            \caption{Trace plot of ICA2}
             \label{fig:x752ical}
             \includegraphics[width=0.5\textwidth]{share/A2_trace_ICA2.eps}
         \end{figure}
 
-        The results are quite similar to those found in PCA, but inverted.
+        The results are quite similar to those found in PCA, but inverted. Now the ICA1 correlates with the last couple of components while ICA2 correlates with the first ones.
 
         We now plot the scores found by doing ICA, which can be seen in Figure~\ref{fig:icascores}.
 
         \begin{figure}[h!]
             \centering
-            \caption{Confidence/Prediction Bands Regression Tree Model}
+            \caption{ICA score distribution}
             \label{fig:icascores}
             \includegraphics[width=0.5\textwidth]{share/A2_icascore.eps}
         \end{figure}
 
+        The score distribution has a much higher magnitude compared to PCA and the distribution is mirrored in the Y-axis. Otherwise they look very similar. The PCA score distribution can be observed in figure~\ref{fig:pcascore}.
     \subsection*{PCA Cross-Validation}
 
- 		We perofm a \emph{Principal component regression} analsysis with \emph{cross validation} in order to examine the number of compponents that sould be seleceted. Below is the resulting plot (\ref{icascores}) of \emph{predicted mean-squared error} in relation to the number of components selected for the model.
+ 		We perform a \emph{Principal component regression} analysis with \emph{cross validation} in order to examine the number of components that should be selected. Below is the resulting plot (\ref{icascores}) of \emph{predicted mean-squared error} in relation to the number of components selected for the model.
 
         \begin{figure}[h!]
             \centering
-            \caption{Confidence/Prediction Bands Regression Tree Model}
+            \caption{Mean squared predicted error over number of components}
             \label{fig:viscosity}
             \includegraphics[width=0.5\textwidth]{share/A2_viscosity.eps}
         \end{figure}
 
-	We can observe from the figure how the MSEP is high when few components are selected and how the MSEP drasticly decreases around 8 components. The number of components with the lowest NSEO is around 20 and after that it slowly increases.
+	We can observe from the figure how the MSEP is high when few components are selected and how the MSEP drastically decreases around 8 components. The number of components with the lowest MSEP is around 20 and after that it slowly increases.
 	
     \section*{Contributions}
-
+    \begin{itemize}
+    	\item Martin Estgren provided all figures and 
+    \end{itemize}
     \nocite{*} % No warnings.
     \bibliographystyle{alpha}
     \bibliography{report}
