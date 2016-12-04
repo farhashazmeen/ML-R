@@ -54,8 +54,7 @@
             \includegraphics[width=\textwidth]{share/A1_data.eps}
         \end{figure}
 
-        The figure indicates that a linear model isn't suitable for predicting the target in this data set, no easily visible pattern can be observed in this plot. Since we are tasked with using \emph{regression trees} in this assignment, the first step is to fit such a model with it, then finding the optimal number of leaves.
-
+        The figure indicates that a linear model isn't suitable for predicting the target in this data set, no easily visible pattern can be observed in this plot. Yet it would be bold to say that there is no correlation between the two, one simply has to use a different scale to get a better perspective. Since we are tasked with using \emph{regression trees} in this assignment, the first step is to fit such a model with it, then finding the optimal number of leaves.
     \subsection*{Regression Tree Analysis}
 
         We have examined how a \emph{regression tree model} fits the data set using \emph{cross-validation} for finding the optimal number of \emph{leaves}. The plotted \emph{decision tree} from the fitted model can be seen in Figure~\ref{fig:tree}. This model was fitted with the following piece of \emph{R} code:
@@ -97,8 +96,7 @@
 
         We explore the same data set as before, still being modeled with a \emph{regression tree model} using the \emph{non-parametric bootstrap}. \emph{Bootstrapping} is used to estimate the properties of an estimator by sampling from an approximated distribution. In the case of \emph{non-parametric bootstrapping}, the underlying distribution is assumed to \emph{not} be known, and the data is instead re-sampled with replacement. The estimated distribution is then given by $\hat{f}(D_1), \hat{f}(D_2), ..., \hat{f}(D_B)$, estimator $\hat{f}$ and data $D_i$.
 
-        For our data set, we re-sample 1000 times using the \emph{non-parametric bootstrapping} function \texttt{boot}, for a confidence level of 95 \% (which is an $\alpha = 5\%$). By retrieving the \emph{confidence intervals} for each $x_i$ and plotting them, we get the \emph{confidence bands} of the model. Which can be seen in a Figure~\ref{fig:confidence_bands} below. Listing~\ref{lst:assignment1} does the \emph{non-parametric bootstrapping} in:
-
+        For our data set, we re-sample 1000 times using the \emph{non-parametric bootstrapping} function \texttt{boot}, for a confidence level of 95 \% (which is an $\alpha = 5\%$). By retrieving the \emph{confidence intervals} for each $x_i$ and plotting them, we get the \emph{confidence bands} of the model. Which can be seen in a Figure~\ref{fig:confidence_bands} below. The confidence bands is a calculation of the interval where the best label is with a 95 \% probability.  Listing~\ref{lst:assignment1} does the \emph{non-parametric bootstrapping} in:
         \lstinputlisting[firstline=25,lastline=34]{../share/assignment1.r}
 
         \begin{figure}[H]
@@ -128,8 +126,7 @@
             \includegraphics[width=\textwidth]{share/A1_parametric.eps}
         \end{figure}
 
-        As can be noted in the figure above, there are a couple of observations outside the prediction band. This is caused because of the $95 \%$ level of confidence imposed on the prediction band. It seems reasonable that $5 \%$ is outside the prediction band. However, this tells us that our model predicts $95 \%$ of the data correctly, which seems a bit unrealistic. By referring back to the residual histogram, the assumption that the data is normally distributed is a bit of a stretch, at least given the current data set. \emph{Non-parametric bootstrapping} seems more suitable.
-
+        As can be noted in the figure above, there are a couple of observations outside the prediction band. This is caused because of the $95 \%$ level of confidence imposed on the prediction band. It seems reasonable that $5 \%$ is outside the prediction band. However, this tells us that our model predicts $95 \%$ of the data correctly, which seems a bit convenient. When using this model to predict new observation would be risky since there does not seem to be any radical outliers in the observed space. By referring back to the residual histogram, the assumption that the data is normally distributed is a bit of a stretch, at least given the current data set.  \emph{Non-parametric bootstrapping} seems more suitable.
         % As can be seen in the figure, there are a pair of observations outside the prediction band. This is of course the result of using $95\%$ confidence.
 
     \section*{Assignment 2}
@@ -177,7 +174,7 @@
 
     \subsection*{Independent Component Analysis}
 
-        We perform the same analysis again, this time using the \emph{Independent component analysis} (ICA). In contrast to to PCA, where we assumed the features are correlated, we assume that they are independent. 
+        We perform the same analysis again, this time using the \emph{Independent component analysis} (ICA). In contrast to to PCA, where PCA strives to find correlation, ICA tries to find hidden variables that describes the data but are completely independent of each other. This would require the a new feature space. 
 
         The loadings are calculated with the function \( \hat{W} = K \dot W \). We plot the traces for each column (the chosen components), the result can observed in Figures~\ref{fig:x750ical}, \ref{fig:x752ical}.
         \lstinputlisting[firstline=42,lastline=45]{../share/assignment2.r}
@@ -194,8 +191,7 @@
             \end{minipage}
         \end{figure}
 
-        The results are quite similar to those found in PCA, but inverted. Now the IC1 correlates with the last couple of components while IC2 correlates with the first ones.
-
+        The results are quite similar to those found in PCA, but inverted. Now the IC1 correlates with the last couple of components while IC2 correlates with the first ones. The reason it is inverted is that we now use a different feature space.
         We now plot the scores found by doing ICA, which can be seen in Figure~\ref{fig:icascores}.
 
         \begin{figure}[H]
@@ -205,8 +201,8 @@
             \includegraphics[width=\textwidth]{share/A2_icascore.eps}
         \end{figure}
 
-        The score distribution has a much higher magnitude compared to PCA and the distribution is mirrored in the Y-axis. Otherwise they look very similar. The PCA score distribution can be observed in figure~\ref{fig:pcascore}.
-    \subsection*{PCA Cross-Validation}
+        The score distribution has a much higher magnitude, again because we use a new feature space, compared to PCA and the distribution is mirrored in the Y-axis. Otherwise they look very similar. The PCA score distribution can be observed in figure~\ref{fig:pcascore}.
+		\subsection*{PCA Cross-Validation}
 
  		We perform a \emph{Principal component regression} analysis with \emph{cross validation} in order to examine the number of components that should be selected. Below is the resulting plot (\ref{fig:icascores}) of \emph{predicted mean-squared error} in relation to the number of components selected for the model.
         \lstinputlisting[firstline=66,lastline=67]{../share/assignment2.r}
@@ -223,8 +219,10 @@
     \section*{Contributions}
         Most of the text contained in this report was written in conjunction with the entire group, therefore the main body of the text is the work of everyone.
     \begin{itemize}
+    \begin{itemize}
         \item{\textbf{Martin Estgren:} provided all the figures, the code for assignment 1, and wrote a lot of the analysis of assignment 2.}
         \item{\textbf{Erik S. V. Jansson:} provided the script for assignment 2, and polished several sections found in assignment 1.}
+        \item{\textbf{Sebastian Maghsoudi:} provided some of the theoretical reasoning found in chapter 1. In chapter 2 most of the reasoning can be found in the ICA section.}
     \end{itemize}
     \nocite{*} % No warnings.
     \bibliographystyle{alpha}
