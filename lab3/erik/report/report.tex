@@ -196,7 +196,7 @@
         \label{table:bayes}
         \end{table}
 
-        It seems that in this case, \emph{Na{\"\i}ve Bayes} performs worse than \emph{decision trees} since the missclassification rate is quite a bit higher. Now, let's assume that we are given a \emph{loss matrix}, a way of \emph{penalizing} the \emph{predictor} to apply weight to certain negatives, which in this case is $L = \left( \begin{smallmatrix}0&1\\10&0\end{smallmatrix} \right)$. Doing this in lines \texttt{92-109} results in a prediction giving the \emph{confusion matrix} below and missclassifications of train = 0.274 and test = 0.278. These missclassifications are a lot lower than those in the normal ``lossless'' model. The reason why this happens is because the cost of doing a faulty classification is highly penalized in one case (while the other isn't penalized as much), this is a underlying reason for these results.
+        It seems that in this case, \emph{Na{\"\i}ve Bayes} performs worse than \emph{decision trees} since the missclassification rate is quite a bit higher. Now, let's assume that we are given a \emph{loss matrix}, a way of \emph{penalizing} the \emph{predictor} to apply weight to certain negatives, which in this case is $L = \left( \begin{smallmatrix}0&1\\10&0\end{smallmatrix} \right)$. Doing this in lines \texttt{92-109} results in a prediction giving the \emph{confusion matrix} below and missclassifications of train = 0.546 and test = 0.549. These missclassifications are a lot higher than those in the normal ``lossless'' model. The reason why this happens is because the cost of doing a faulty classification is highly penalized in one case (while the other isn't penalized as much), this is a underlying reason for these results.
 
 
         \begin{table}[h]
@@ -206,9 +206,9 @@
             &\multicolumn{1}{c}{\textbf{bad}}
             &\multicolumn{1}{c}{\textbf{good}} \\
             \cline{2-3}
-            \textbf{bad} & 27 & 17 \\
+            \textbf{bad} & 137 & 263 \\
             \cline{2-3}
-            \textbf{good} & 120 & 336 \\
+            \textbf{good} & 10 & 90 \\
             \cline{2-3}
         \end{tabular}
         \begin{tabular}{r|c|c|}
@@ -216,9 +216,9 @@
             &\multicolumn{1}{c}{\textbf{bad}}
             &\multicolumn{1}{c}{\textbf{good}} \\
             \cline{2-3}
-            \textbf{bad} & 40 & 24 \\
+            \textbf{bad} & 207 & 394 \\
             \cline{2-3}
-            \textbf{good} & 185 & 501 \\
+            \textbf{good} & 18 & 131 \\
             \cline{2-3}
         \end{tabular}
         \end{center}

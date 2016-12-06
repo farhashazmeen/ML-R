@@ -76,9 +76,28 @@ cat("Missclassification for the optimal tree depth: (",
 fit <- naiveBayes(good_bad ~ ., data = training)
 training_prediction <- predict(fit, training, type = "class")
 testing_prediction <- predict(fit, testing, type = "class")
-cat("Missclassifications using Naive Bayes method:  (",
+cat("\nMissclassifications using Naive Bayes method:  (",
     mean(training_prediction != trainingy), "," ,
     mean(testing_prediction != testingy), ")\n")
-cat("\nConfusion matrices for using Naive Bayes:\n")
+cat("Confusion matrices for using Naive Bayes:\n")
 print(table(training_prediction, trainingy))
 print(table(testing_prediction, testingy))
+
+training_probability <- predict(fit, training, type = "raw")
+training_loss <- training_probability[,1]*10 > training_probability[,2]
+training_loss[training_loss == FALSE] = "good"
+training_loss[training_loss == TRUE] = "bad"
+training_loss <- as.factor(training_loss)
+
+testing_probability <- predict(fit, testing, type = "raw")
+testing_loss <- testing_probability[,1]*10 > testing_probability[,2]
+testing_loss[testing_loss == FALSE] = "good"
+testing_loss[testing_loss == TRUE] = "bad"
+testing_loss <- as.factor(testing_loss)
+
+cat("\n\nMissclassifications using Naive Bayes loss method:  (",
+    mean(training_loss != trainingy), "," ,
+    mean(testing_loss != testingy), ")\n")
+cat("Confusion matrices for using Naive Bayes loss:\n")
+print(table(training_loss, trainingy))
+print(table(testing_loss, testingy))
