@@ -70,7 +70,7 @@ forecast <- function(date, location, weather) {
     for (i in 1:nrow(weather)) { # Shitty apply fails...
         if (i%%stp==0) cat("Progress",(i/nrow(weather))*100,"%\n")
         for (j in 1:length(clock)) { # Need to predict for each...
-            # Calculate the similarity for this observation and our desired resonse.
+            # Calculate the similarity for this observation and our desired response
             similarities[i, j] <- forecast_kernel(c(location[1], weather[i,]$longitude),
                                                   c(location[2], weather[i,]$latitude),
                                  c(day, weather[i,]$day), c(clock[j], weather[i,]$hour))
@@ -78,6 +78,7 @@ forecast <- function(date, location, weather) {
             weighted_temperature <- similarities[i, j] * weather[i,]$air_temperature
             weighted_temperatures[j] <- weighted_temperatures[j] + weighted_temperature
         }
+        # Apply the Nadaraya–Watson kernel regression.
     } ; return(weighted_temperatures / total_kernel_sum)
 }
 
