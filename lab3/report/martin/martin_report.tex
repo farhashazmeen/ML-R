@@ -175,24 +175,24 @@ We now apply a \textit{loss matrix} to the predictions of the model and compare 
   10 & 0
   \end{bmatrix}
 \end{equation}
-The loss matrix will make \textit{false negatives} be classified much harsher compared to \textit{false positives}.
+The loss matrix will make \textit{false positives} be classified much harsher compared to \textit{false negatives}.
 
 \begin{verbatim}
 model fitness of the training set
       predicted
 truth bad good
-bad   27   17
-good  120  336
-misclassification rate: 0.454
+bad   137 263
+good  10  90
+misclassification rate: 0.546
 
 model fitness of the testing set
       predicted
 truth bad good
-bad  18  10
-good 56  166
-misclassification rate: 0.432
+bad   66  134
+good  8   42
+misclassification rate: 0.568
 \end{verbatim}
-The result indicates a misclassification rate 0.12-0.15 worse than unweighted. If the loss matrix was flipped it would result in an improvement in performance of about 2-3 percent compared to the \textit{naive bayesian} model without loss matrix and about the same as the best decision tree classifier.
+Applying the loss matrix resulted in a higher misclassification rate with the number of false positives drastically reduced at the cost of false negatives increasing. The reason for this is that we consider false positives to be much worse compared the false negatives. In the group report we flipped the loss matrix which resulted in a lower misclassification score, which was incorrect.
 
 \section{Appendix: A - Code assignment 1}
 
