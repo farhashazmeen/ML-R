@@ -15,27 +15,27 @@
 \usepackage{mathtools}
 \usepackage{amssymb}
 \lstset{basicstyle=\footnotesize\ttfamily,
-        breakatwhitespace = false,
-        breaklines = true,
-        keepspaces = true,
-        language = R,
-        showspaces = false,
-        showstringspaces = false,
-        belowcaptionskip = \bigskipamount,
-        framerule = 0.80pt,
-        frame = tb,
-        belowskip = \bigskipamount,
-        escapeinside={<@}{@>}}
+breakatwhitespace = false,
+breaklines = true,
+keepspaces = true,
+language = R,
+showspaces = false,
+showstringspaces = false,
+belowcaptionskip = \bigskipamount,
+framerule = 0.80pt,
+frame = tb,
+belowskip = \bigskipamount,
+escapeinside={<@}{@>}}
 
 \title{TDDE01 -- Machine Learning \\
-       Group 9 Laboration Report 5}
+Group 9 Laboration Report 5}
 \author{{Martin Estgren \texttt{<mares480>}} \\
-        {Erik S. V. Jansson \texttt{<erija578>}} \\
-        {Sebastian Maghsoudi \texttt{<sebma654>}} \\~\\
-        {Linköping University (LiU), Sweden}}
+{Erik S. V. Jansson \texttt{<erija578>}} \\
+{Sebastian Maghsoudi \texttt{<sebma654>}} \\~\\
+{Linköping University (LiU), Sweden}}
 
 \begin{document}
-    \pagenumbering{arabic}
+\pagenumbering{arabic}
     \maketitle % Generate.
 
     Increasing the accuracy of \emph{weather forecasts} is an important task. We propose an estimator which produces the \emph{air temperature forecast} in \emph{Sweden}, given a \emph{latitude/longitude coordinate} and also \emph{date}. Some observations by \emph{SMHI}, taken from weather stations, have been given for training our estimator.
@@ -47,13 +47,15 @@
     By using \(k_\sigma(\bm{x}^{(i)}, \bm{x'})\) in \emph{Nadaraya–Watson's} \(\bm{y'}\) estimator, shown in Equation~\ref{eq:nadaraya_watson}, we are essentially \emph{weighing} how important the contributions from \(\bm{y}^{(i)}\) are to \(\bm{y'}\), because \emph{similar} \(\bm{x}^{(i)}\) will give higher \(k_\sigma\). Further descriptions: see \emph{Friedman et al.\ }~\cite{friedman2009elements}.
 
     \begin{equation} \label{eq:grbf}
-        k_\sigma(\bm{x}, \bm{x'}) = \mathrm{exp}\bigg(\frac{- \, {\left\Vert(\bm{x} - \bm{x'}) \right\Vert}^2}
-                                                           {2\sigma^2 \; \{\sigma \approx h\}}\bigg)
+    k_\sigma(\bm{x}, \bm{x'}) = \mathrm{exp}\bigg(\frac{- \, {\left\Vert(\bm{x} - \bm{x'}) \right\Vert}^2}
+    {2\sigma^2 \; \{\sigma \approx h\}}\bigg)
     \end{equation}
 
+    \lstinputlisting[firstline=23,lastline=25]{../share/script.r}
+
     \begin{equation} \label{eq:nadaraya_watson}
-        \bm{y'}(\bm{x}, \bm{x'}) = \frac{\sum_n{\bm{y}^{(i)}k_\sigma(\bm{x}^{(i)}, \bm{x'})}}
-                                               {\sum_n{k_\sigma(\bm{x}^{(i)}, \bm{x'})}}
+    \bm{y'}(\bm{x}, \bm{x'}) = \frac{\sum_n{\bm{y}^{(i)}k_\sigma(\bm{x}^{(i)}, \bm{x'})}}
+    {\sum_n{k_\sigma(\bm{x}^{(i)}, \bm{x'})}}
     \end{equation}
 
     We now describe the functions which were used to determine the distance/similarity for the kernels.
@@ -61,39 +63,114 @@
     Below follows the applied \emph{distance functions}, which give the measured distance between a pair of \emph{locations}, \emph{times of the day}, and also \emph{dates of year}. These distance and kernel functions can be found in Listing~\ref{lst:forecast}, where they follow similarly as described.
 
     \begin{equation*} \label{eq:location}
-        d_l = r\, \mathrm{hav}^{-1}(h),\; \mathrm{hav}(\varphi) = \frac{1 - \cos\varphi}{2}
+    d_l = r\, \mathrm{hav}^{-1}(h),\; \mathrm{hav}(\varphi) = \frac{1 - \cos\varphi}{2}
+    \end{equation*}
+    
+    \lstinputlisting[firstline=28,lastline=32]{../share/script.r}
+    
+    \begin{equation*} \label{eq:time}
+    d_t = \begin{cases}
+    |x - y| & |x - y| < (x + y) \bmod 24\\
+    (x + y) \bmod 24 & |x - y| \geq (x + y) \bmod 24
+    \end{cases}
     \end{equation*}
 
-    \begin{equation*} \label{eq:time}
-        d_t = \begin{cases}
-            |x - y| & |x - y| < (x + y) \bmod 24\\
-            (x + y) \bmod 24 & |x - y| \geq (x + y) \bmod 24
-        \end{cases}
-    \end{equation*}
+   \lstinputlisting[firstline=45,lastline=51]{../share/script.r}
 
     \begin{equation*} \label{eq:day}
-        d_d = \begin{cases}
-            |x - y| & |x - y| < (x + y) \bmod 365\\
-            (x + y) \bmod 365 & |x - y| \geq (x + y) \bmod 365
-        \end{cases}
+    d_d = \begin{cases}
+    |x - y| & |x - y| < (x + y) \bmod 365\\
+    (x + y) \bmod 365 & |x - y| \geq (x + y) \bmod 365
+    \end{cases}
     \end{equation*}
+
+   \lstinputlisting[firstline=35,lastline=42]{../share/script.r}
+    
 
     Finally, we have the \emph{three different kernels} which contribute in unison to the final \emph{forecast kernel}. Each of these use Equation~\ref{eq:grbf} with their respective \emph{distance functions} and also \emph{kernel width} \(h\) (\(\sigma\) here).
 
+
+    \section{Result}
+
+    The date and time formats for the data set required pre-processing before they could be used in the above mentioned functions.
+    \lstinputlisting[firstline=104,lastline=108]{../share/script.r}
+
+
+    The plots in Figures~\ref{fig:time} shows the time-kernel distance for each of the observations.  
+    \begin{figure}[!ht]
+    \centering
+    \caption{Distance plot (time of day) for the observations (Ordered by time of day) \label{fig:time}}
+	    \begin{minipage}[]{0.2\textwidth}
+	    	\includegraphics[width=\textwidth]{share/1_time.eps}
+	    \end{minipage}
+	    \begin{minipage}[]{0.2\textwidth}
+	    	\includegraphics[width=\textwidth]{share/2_time.eps}
+	    \end{minipage}
+	    \begin{minipage}[]{0.2\textwidth}
+	    	\includegraphics[width=\textwidth]{share/3_time.eps}
+	    \end{minipage}
+	    \begin{minipage}[]{0.2\textwidth}
+	    	\includegraphics[width=\textwidth]{share/4_time.eps}
+	    \end{minipage}
+	    \begin{minipage}[]{0.2\textwidth}
+	   		 \includegraphics[width=\textwidth]{share/5_time.eps}
+	    \end{minipage}
+	    \begin{minipage}[]{0.2\textwidth}
+	    	\includegraphics[width=\textwidth]{share/6_time.eps}
+	    \end{minipage}
+	    \begin{minipage}[]{0.2\textwidth}
+	    	\includegraphics[width=\textwidth]{share/7_time.eps}
+	    \end{minipage}
+	    \begin{minipage}[]{0.2\textwidth}
+	   		 \includegraphics[width=\textwidth]{share/8_time.eps}
+	    \end{minipage}
+	    \begin{minipage}[]{0.4\textwidth}
+	    	\includegraphics[width=\textwidth]{share/9_time.eps}
+	    \end{minipage}
+    \end{figure}
+
+    The plots in Figures~\ref{fig:day} shows the date-kernel distance for each of the observations.  
+    \begin{figure}[!h]
+    \centering
+    \caption{Distance plot (day of year) for the observations (Ordered by year/month/day)\label{fig:day}}
+	    \begin{minipage}[]{0.4\textwidth}
+	    	\includegraphics[width=\textwidth]{share/1_date.eps}
+	    \end{minipage}
+    \end{figure}
+
+    The plots in Figures~\ref{fig:dist} shows the longitude/latitude-kernel distance for each of the observations.  
+    \begin{figure}[!h]
+    \centering
+    \caption{Distance plot (day of year) for the observations (ordered by station)\label{fig:dist}}
+	    \begin{minipage}[]{0.4\textwidth}
+	    	\includegraphics[width=\textwidth]{share/1_dist.eps}
+	    \end{minipage}
+    \end{figure}
+
+    The plots in Figures~\ref{fig:result} shows the predicted \textit{air temperature} for each of the observations. 
+    \begin{figure}[!h]
+    \centering
+    \caption{Predicted temperature for the day 2013-04-12 in the interval 16:00-24:00 (ordered by hour)\label{fig:result}}
+	    \begin{minipage}[]{0.4\textwidth}
+	    	\includegraphics[width=\textwidth]{share/result.eps}
+	    \end{minipage}
+    \end{figure}
+
+
     \section*{Contributions}
 
-        \begin{itemize}
-            \item{\textbf{Martin Estgren:} ...}
-            \item{\textbf{Erik S. V. Jansson:} ...}
-            \item{\textbf{Sebastian Maghsoudi:} ...}
-        \end{itemize}
+    \begin{itemize}
+    	\item{\textbf{Martin Estgren:} ...}
+    	\item{\textbf{Erik S. V. Jansson:} ...}
+    	\item{\textbf{Sebastian Maghsoudi:} ...}
+    \end{itemize}
 
     \nocite{*} % No warnings.
     \bibliographystyle{alpha}
     \bibliography{report}
     \onecolumn \appendix
     \section*{Appendix}
+ 	\lstinputlisting[caption={Script for Assignment},label={lst:script}]{../share/script.r}
 
-        ...
 
-\end{document}
+    \end{document}

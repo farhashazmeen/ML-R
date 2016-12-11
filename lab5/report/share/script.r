@@ -35,6 +35,9 @@ kernel.distance = function(data_pos, obs_pos){
 kernel.date_distance = function(data_date, obs_date){
   # Use diff in days
   dist = as.numeric(difftime(obs_date, data_date, units = "days")) 
+  dist = abs(dist)
+  dist[dist > 182] = 365 - dist[dist > 182]
+  #print(dist)
   return(gaussian(dist  / h_date))
 }
 
@@ -42,6 +45,8 @@ kernel.date_distance = function(data_date, obs_date){
 kernel.time_distance = function(data_time,obs_time){
   # Use diff in hours
   dist = as.numeric(difftime(obs_time, data_time, units = "hours"))
+  dist = abs(dist)
+  dist[dist > 12] = 24 - dist[dist > 12]
   return(gaussian(dist/ h_time))
 }
 
@@ -72,24 +77,24 @@ kernel = function(data, observation, index){
   setEPS()
   postscript(paste(index,sep="","_dist.eps"))
   plot_sample = data$dist_pos
-  plot(1:length(plot_sample),plot_sample)
+  plot(1:length(plot_sample),plot_sample, ylab = "long/lat", xlab = "Index")
   dev.off()
   
   setEPS()
   postscript(paste(index,sep="","_date.eps"))
   plot_sample = data[order(data$date),]$dist_date
-  plot(1:length(plot_sample),plot_sample)
+  plot(1:length(plot_sample),plot_sample, ylab = "Date (days)", xlab = "Index")
   dev.off()
   
   setEPS()
   postscript(paste(index,sep="","_time.eps"))
   plot_sample = data[order(data$time),]$dist_time
-  plot(1:length(plot_sample),plot_sample)
+  plot(1:length(plot_sample),plot_sample, ylab = "Time (hours)", xlab = "Index")
   dev.off()
   
   # Pick the N best observations
-  n = nrow(data)
-  selection = data[order(data$distance, decreasing = TRUE),][n,]
+  #n = nrow(data)
+  selection = data#data[order(data$distance, decreasing = TRUE),][n,]
 
   # Return the mean temperature over the picked obsrvations
   return(sum(selection$distance * selection$air_temperature) / sum(selection$distance))
