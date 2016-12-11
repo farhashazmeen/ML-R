@@ -98,7 +98,7 @@ Group 9 Laboration Report 5}
 
 
     The plots in Figures~\ref{fig:time} shows the time-kernel distance for each of the observations.  
-    \begin{figure}[!ht]
+    \begin{figure}[H]
     \centering
     \caption{Distance plot (time of day) for the observations (Ordered by time of day) \label{fig:time}}
 	    \begin{minipage}[]{0.2\textwidth}
@@ -135,27 +135,30 @@ Group 9 Laboration Report 5}
 	    	\includegraphics[width=\textwidth]{share/11_time.eps}
 	    \end{minipage}
     \end{figure}
+	The figures would indicate that the close a given data sample (time of day) is to the observation the greater the value of the kernel. In the last couple of figures we can observe how the kernel value loops around the clock, as would be expected.
 
     The plots in Figures~\ref{fig:day} shows the date-kernel distance for each of the observations.  
-    \begin{figure}[!h]
+    \begin{figure}[H]
     \centering
     \caption{Distance plot (day of year) for the observations (Ordered by year/month/day)\label{fig:day}}
 	    \begin{minipage}[]{0.4\textwidth}
 	    	\includegraphics[width=\textwidth]{share/1_date.eps}
 	    \end{minipage}
     \end{figure}
+	It's harder to detect the trend in the date feature but we can observe a spike each year. For the purpose of processing, all years are set to 2016.
 
     The plots in Figures~\ref{fig:dist} shows the longitude/latitude-kernel distance for each of the observations.  
-    \begin{figure}[!h]
+    \begin{figure}[H]
     \centering
     \caption{Distance plot (day of year) for the observations (ordered by station)\label{fig:dist}}
 	    \begin{minipage}[]{0.4\textwidth}
 	    	\includegraphics[width=\textwidth]{share/1_dist.eps}
 	    \end{minipage}
     \end{figure}
+    The data is ordered by station number. As expected we can observe a specific group of stations closer with a higher kernel value that others. Given that there's a relation between the station number and location this would be the expected result.
 
     The plots in Figures~\ref{fig:result} shows the predicted \textit{air temperature} for each of the observations. 
-    \begin{figure}[!h]
+    \begin{figure}[H]
     \centering
     \caption{Predicted temperature for the day 2013-04-12 in the interval 04:00-24:00 (ordered by hour)\label{fig:result}}
 	    \begin{minipage}[]{0.4\textwidth}
@@ -163,15 +166,24 @@ Group 9 Laboration Report 5}
 	    \end{minipage}
     \end{figure}
 
-	In figure \ref{fig:result} the observer might wonder the  following question: \textit{Why are the temperatures this low?}\newline
+	In Figure~\ref{fig:result} the observer might wonder the following question: \textit{Why are the temperatures this low?}\newline
     The obvious answer is that the point of interest is in Sweden. But the actual answer might be that, since the kernel feature are independent from one another, two "good" values might counter one "bad" value. Meaning that two of the kernels might return very high values since they almost completely match with the point of interest. One value however might be very small, e.g. the date is completely in the wrong season. This issue will pull the predicted temperature to the sample average. However, there is a solution to this problem. In order to avoid that irrelevant observations affects the result, one might exclude such observation. In truth could only include a number of observations (100) that are reasonably close to the point of interest. This will make the result much more reasonable in this aspect. There is however a limit to where the data stops being reasonable because of spikes in temperature change. This happens because to few observations are used.
+
+    \begin{figure}[H]
+    \centering
+    \caption{Predicted temperature for the day 2013-07-12 in the interval 04:00-24:00 (ordered by hour)\label{fig:bad_result}}
+	    \begin{minipage}[]{0.4\textwidth}
+	    	\includegraphics[width=\textwidth]{share/bad_result.eps}
+	    \end{minipage}
+    \end{figure}
+	In Figure~\ref{fig:bad_result} the observations for the date 2013-07-12 can be observed. As described above, the mean temperature of the year means that even in one of the warmest periods where the temperature is expected to be close to \(20^\circ \) we get degrees in the ones of digits.
 
     \section*{Contributions}
 
     \begin{itemize}
-    	\item{\textbf{Martin Estgren:} provided the all the figures and code listings.}
+    	\item{\textbf{Martin Estgren:} Provided the all the figures and code listings, also wrote some of the result analysis.}
     	\item{\textbf{Erik S. V. Jansson:} ...}
-    	\item{\textbf{Sebastian Maghsoudi:} Answered questions specified in the assignment,(width and odd tempratures).}
+    	\item{\textbf{Sebastian Maghsoudi:} Answered questions specified in the assignment,(width and odd temperatures).}
     \end{itemize}
 
     \nocite{*} % No warnings.
