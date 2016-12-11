@@ -58,7 +58,7 @@
 
     We now describe the functions which were used to determine the distance/similarity for the kernels.
 
-    Below follows the applied \emph{distance functions}, which give the measured distance between a pair of \emph{locations}, \emph{times of the day}, and also \emph{dates of year}.
+    Below follows the applied \emph{distance functions}, which give the measured distance between a pair of \emph{locations}, \emph{times of the day}, and also \emph{dates of year}. These distance and kernel functions can be found in Listing~\ref{lst:forecast}, where they follow similarly as described.
 
     \begin{equation*} \label{eq:location}
         d_l = r\, \mathrm{hav}^{-1}(h),\; \mathrm{hav}(\varphi) = \frac{1 - \cos\varphi}{2}
@@ -77,6 +77,8 @@
             (x + y) \bmod 365 & |x - y| \geq (x + y) \bmod 365
         \end{cases}
     \end{equation*}
+
+    Finally, we have the \emph{three different kernels} which contribute in unison to the final \emph{forecast kernel}. Each of these use Equation~\ref{eq:grbf} with their respective \emph{distance functions} and also \emph{kernel width} \(h\) (\(\sigma\) here).
 
     \section*{Contributions}
 
