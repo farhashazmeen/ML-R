@@ -1,5 +1,6 @@
 set.seed(1234567890)
 library(geosphere)
+library(ggplot2)
 stations <- read.csv("stations.csv", stringsAsFactors=FALSE)
 temps <- read.csv("temps50k.csv", stringsAsFactors=FALSE)
 st <- merge(stations,temps,by="station_number")
@@ -25,17 +26,15 @@ kernel.distance = function(data_pos, obs_pos){
 
 kernel.date_distance = function(data_date, obs_date){
   dist = as.numeric(difftime(obs_date, data_date, units = "days")) 
-  dist = abs(dist)
   return(gaussian(dist  / h_date))
 }
 
 kernel.time_distance = function(data_time,obs_time){
   dist = as.numeric(difftime(obs_time, data_time, units = "hours"))
-  dist = abs(dist)
   return(gaussian(dist/ h_time))
 }
 
-kernel = function(data, observation){
+kernel = function(data, observation, index){
   data_fixed = fix_time(data)
   observation = fix_time(observation)
   
@@ -54,17 +53,28 @@ kernel = function(data, observation){
   data$dist_pos = dist_pos
   data$dist_date = dist_date
   data$dist_time = dist_time
-  
+
+  setEPS()
+  postscript(paste(index,sep="","_dist.eps"))
   plot_sample = data$dist_pos
   plot(1:length(plot_sample),plot_sample)
+  dev.off()
   
+  setEPS()
+  postscript(paste(index,sep="","_date.eps"))
   plot_sample = data[order(data$date),]$dist_date
   plot(1:length(plot_sample),plot_sample)
+  dev.off()
   
+  setEPS()
+  postscript(paste(index,sep="","_time.eps"))
   plot_sample = data[order(data$time),]$dist_time
   plot(1:length(plot_sample),plot_sample)
+  dev.off()
   
-  return(sum(data$distance * data$air_temperature) / sum(data$distance))
+  selection = data[order(data$distance, decreasing = TRUE),]
+  print(selection)
+  return(sum(selection$distance * selection$air_temperature) / sum(selection$distance))
 }
 
 fix_time = function(data){
@@ -75,18 +85,20 @@ fix_time = function(data){
 
 a <- 58.4274
 b <- 14.826
-date <- "2013-06-24"
-times <- c("12:00:00")
-n = length(date)
+date <- c("2013-04-12")
+times <- c("16:00:00", "17:00:00", "18:00:00", "19:00:00", "20:00:00", "21:00:00", "22:00:00",  "23:00:00", "24:00:00")
+n = length(time)
 temp <- vector(length=length(date))
 
 # # Students' code here
 
 
-data = data.frame(date=rep(date,n), time=times, longitude=rep(a,n), latitude=rep(b,n))
+data = data.frame(date=rep(date,n/length(date)), time=rep(times,n/length(date)), longitude=rep(a,n), latitude=rep(b,n))
 for(i in 1:nrow(data)){
-  temp[i]  = kernel(st, data[i,])
+  temp[i]  = kernel(st, data[i,],i)
 }
 print(temp)
-
+setEPS()
+postscript(paste("result",sep=".","eps"))
 plot(temp, type="o")
+dev.off()
