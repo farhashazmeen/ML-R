@@ -89,6 +89,7 @@ Group 9 Laboration Report 5}
 
     Finally, we have the \emph{three different kernels} which contribute in unison to the final \emph{forecast kernel}. Each of these use Equation~\ref{eq:grbf} with their respective \emph{distance functions} and also \emph{kernel width} \(h\) (\(\sigma\) here).
 
+	An obvious question the reader has by now has: \textit{What values should be assigned to \(2\sigma^2\)?}\newline If said reader does not wonder about this, said reader needs to be more intellectually involved in this papers reasoning in the future. However, the answer to the question has to do with the scale of the range of values that the distance can have. One could assign 1 to as a weight, and it might be sufficient, especially if the values are not very large for relatively close observations. This means it is completely related to the context. When in the the context of physical distance it is reasonable to use 1000000 as \textit{h} since if the point of interest is only a few km away from an already existing observation, the kernel value will return close to 0 values. For date and time, the values already seems to be good enough and only needs to be modified with very small factors. Date uses 3 for \textit{h} and time uses 2. The intuition seems to be confirmed when observing the result from the kernels presented in figure \ref{fig:time}, \ref{fig:dist} and \ref{fig:date}. 
 
     \section{Result}
 
