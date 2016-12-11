@@ -38,6 +38,46 @@
     \pagenumbering{arabic}
     \maketitle % Generate.
 
+    Increasing the accuracy of \emph{weather forecasts} is an important task. We propose an estimator which produces the \emph{air temperature forecast} in \emph{Sweden}, given a \emph{latitude/longitude coordinate} and also \emph{date}. Some observations by \emph{SMHI}, taken from weather stations, have been given for training our estimator.
+
+    By using a \emph{Nadaraya–Watson regression kernel}, we can estimate the temperatures \(\bm{y'}\). This is done by taking the \emph{kernels} \(k_\sigma(\bm{x}^{(i)}, \bm{x'})\) for each \(i^{th}\) data from the training set and using it as a \emph{weight} when considering the response variable \(\bm{y}^{(i)}\). Essentially, the kernel \(k_\sigma(\bm{x}^{(i)}, \bm{x'})\) will reduce \(\bm{y}^{(i)}\)'s significance in the \emph{total contribution} by giving less weight when the \(\bm{x^{(i)}}\) and \(\bm{x'}\) are further away (in some measure).
+
+    We have used a \emph{Gaussian Radial Basis Function} as our \emph{kernel}, which is defined in Equation~\ref{eq:grbf} below. Note the parameter \(\sigma\), which can be considered as the \emph{spread} or \emph{width} of the kernel, and also \(\bm{x^{(i)}} - \bm{x'}\) which is the \emph{distance function}; giving our kernel the property of a \emph{similarity function} (because of \(e^{(\cdots)}\)).
+
+    By using \(k_\sigma(\bm{x}^{(i)}, \bm{x'})\) in \emph{Nadaraya–Watson's} \(\bm{y'}\) estimator, shown in Equation~\ref{eq:nadaraya_watson}, we are essentially \emph{weighing} how important the contributions from \(\bm{y}^{(i)}\) are to \(\bm{y'}\), because \emph{similar} \(\bm{x}^{(i)}\) will give higher \(k_\sigma\). Further descriptions: see \emph{Friedman et al.\ }~\cite{friedman2009elements}.
+
+    \begin{equation} \label{eq:grbf}
+        k_\sigma(\bm{x}, \bm{x'}) = \mathrm{exp}\bigg(\frac{- \, {\left\Vert(\bm{x} - \bm{x'}) \right\Vert}^2}
+                                                           {2\sigma^2 \; \{\sigma \approx h\}}\bigg)
+    \end{equation}
+
+    \begin{equation} \label{eq:nadaraya_watson}
+        \bm{y'}(\bm{x}, \bm{x'}) = \frac{\sum_n{\bm{y}^{(i)}k_\sigma(\bm{x}^{(i)}, \bm{x'})}}
+                                               {\sum_n{k_\sigma(\bm{x}^{(i)}, \bm{x'})}}
+    \end{equation}
+
+    We now describe the functions which were used to determine the distance/similarity for the kernels.
+
+    Below follows the applied \emph{distance functions}, which give the measured distance between a pair of \emph{locations}, \emph{times of the day}, and also \emph{dates of year}.
+
+    \begin{equation*} \label{eq:location}
+        d_l = r\, \mathrm{hav}^{-1}(h),\; \mathrm{hav}(\varphi) = \frac{1 - \cos\varphi}{2}
+    \end{equation*}
+
+    \begin{equation*} \label{eq:time}
+        d_t = \begin{cases}
+            |x - y| & |x - y| < (x + y) \bmod 24\\
+            (x + y) \bmod 24 & |x - y| \geq (x + y) \bmod 24
+        \end{cases}
+    \end{equation*}
+
+    \begin{equation*} \label{eq:day}
+        d_d = \begin{cases}
+            |x - y| & |x - y| < (x + y) \bmod 365\\
+            (x + y) \bmod 365 & |x - y| \geq (x + y) \bmod 365
+        \end{cases}
+    \end{equation*}
+
     \section*{Contributions}
 
         \begin{itemize}
