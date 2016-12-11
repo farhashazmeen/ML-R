@@ -163,13 +163,15 @@ Group 9 Laboration Report 5}
 	    \end{minipage}
     \end{figure}
 
+	In figure \ref{fig:result} the observer might wonder the  following question: \textit{Why are the temperatures this low?}\newline
+    The obvious answer is that the point of interest is in Sweden. But the actual answer might be that, since the kernel feature are independent from one another, two "good" values might counter one "bad" value. Meaning that two of the kernels might return very high values since they almost completely match with the point of interest. One value however might be very small, e.g. the date is completely in the wrong season. This issue will pull the predicted temperature to the sample average. However, there is a solution to this problem. In order to avoid that irrelevant observations affects the result, one might exclude such observation. In truth could only include a number of observations (100) that are reasonably close to the point of interest. This will make the result much more reasonable in this aspect. There is however a limit to where the data stops being reasonable because of spikes in temperature change. This happens because to few observations are used.
 
     \section*{Contributions}
 
     \begin{itemize}
     	\item{\textbf{Martin Estgren:} provided the all the figures and code listings.}
     	\item{\textbf{Erik S. V. Jansson:} ...}
-    	\item{\textbf{Sebastian Maghsoudi:} ...}
+    	\item{\textbf{Sebastian Maghsoudi:} Answered questions specified in the assignment,(width and odd tempratures).}
     \end{itemize}
 
     \nocite{*} % No warnings.
