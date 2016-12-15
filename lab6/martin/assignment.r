@@ -5,14 +5,22 @@ trva <- data.frame(Var, Sin=sin(Var))
 tr <- trva[1:25,] # Training
 va <- trva[26:50,] # Validation
 # Random initializaiton of the weights in the interval [-1, 1]
-results = matrix(0,10,nrow(tr))
-winit <- runif(10,-1,1)# Your code here
+results = rep(0,10)
+print(results)
+winit <- runif(250,-1,1)
   for(i in 1:10) {
-    nn <- neuralnet("Sin ~ Var",data=tr, hidden = 10, threshold = i/1000 ,startweights = winit)
-    result = compute(nn, (1:nrow(tr)))$net.result
-    results[i,] = result
+    nn <- neuralnet(formula = Sin ~ Var, data=tr, hidden = 10, threshold = i/1000 ,startweights = winit)
+    result = compute(nn, va$Var)$net.result 
+    results[i] = mean((result - va$Sin)^2)
 }
-plot(nn <- neuralnet())
-  # Plot of the predictions (black dots) and the data (red dots)
+best = which.min(results)
+print(best)
+nn <- neuralnet(formula = Sin ~ Var , data=trva, hidden = 10, threshold = best/1000, startweights = winit)
+png("nn.png")
+plot(nn)
+dev.off()
+# Plot of the predictions (black dots) and the data (red dots)
+png("result.png")
   plot(prediction(nn)$rep1)
   points(trva, col = "red")
+dev.off()
