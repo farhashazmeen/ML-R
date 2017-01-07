@@ -11,8 +11,8 @@ st <- merge(stations,temps,by="station_number")
 st = st[,c("longitude", "latitude" , "date", "time", "air_temperature")]
 
 # To reduce time
-ind <- sample(1:50000, 5000)
-st <- st[ind,]
+#ind <- sample(1:50000, 5000)
+#st <- st[ind,]
 
 # Weights for ech of the kernels
 h_distance = 1000000
@@ -35,6 +35,9 @@ kernel.distance = function(data_pos, obs_pos){
 kernel.date_distance = function(data_date, obs_date){
   # Use diff in days
   dist = as.numeric(difftime(obs_date, data_date, units = "days")) 
+  dist = abs(dist)
+  dist[dist > 182] = 365 - dist[dist > 182]
+  #print(dist)
   return(gaussian(dist  / h_date))
 }
 
@@ -42,6 +45,8 @@ kernel.date_distance = function(data_date, obs_date){
 kernel.time_distance = function(data_time,obs_time){
   # Use diff in hours
   dist = as.numeric(difftime(obs_time, data_time, units = "hours"))
+  dist = abs(dist)
+  dist[dist > 12] = 24 - dist[dist > 12]
   return(gaussian(dist/ h_time))
 }
 
@@ -63,33 +68,33 @@ kernel = function(data, observation, index){
   dist_date = kernel.date_distance(obs_date,data_date)
   dist_time = kernel.time_distance(obs_time,data_time)
   dist = dist_pos + dist_date + dist_time
-  data$distance = dist
-  data$dist_pos = dist_pos
-  data$dist_date = dist_date
-  data$dist_time = dist_time
+  data_fixed$distance = dist
+  data_fixed$dist_pos = dist_pos
+  data_fixed$dist_date = dist_date
+  data_fixed$dist_time = dist_time
 
   # Plot distance kernels
   setEPS()
   postscript(paste(index,sep="","_dist.eps"))
-  plot_sample = data$dist_pos
-  plot(1:length(plot_sample),plot_sample)
+  plot_sample = data_fixed$dist_pos
+  plot(1:length(plot_sample),plot_sample, ylab = "long/lat", xlab = "Index")
   dev.off()
   
   setEPS()
   postscript(paste(index,sep="","_date.eps"))
-  plot_sample = data[order(data$date),]$dist_date
-  plot(1:length(plot_sample),plot_sample)
+  plot_sample = data_fixed[order(data_fixed$date),]$dist_date
+  plot(1:length(plot_sample),plot_sample, ylab = "Date (days)", xlab = "Index")
   dev.off()
   
   setEPS()
   postscript(paste(index,sep="","_time.eps"))
-  plot_sample = data[order(data$time),]$dist_time
-  plot(1:length(plot_sample),plot_sample)
+  plot_sample = data_fixed[order(data_fixed$time),]$dist_time
+  plot(1:length(plot_sample),plot_sample, ylab = "Time (hours)", xlab = "Index")
   dev.off()
   
   # Pick the N best observations
-  n = nrow(data)
-  selection = data[order(data$distance, decreasing = TRUE),][n,]
+  #n = nrow(data)
+  selection = data_fixed#data[order(data$distance, decreasing = TRUE),][n,]
 
   # Return the mean temperature over the picked obsrvations
   return(sum(selection$distance * selection$air_temperature) / sum(selection$distance))
@@ -105,8 +110,8 @@ fix_time = function(data){
 # Set observation featuers
 a <- 58.4274
 b <- 14.826
-date <- c("2013-04-12")
-times <- c("16:00:00", "17:00:00", "18:00:00", "19:00:00", "20:00:00", "21:00:00", "22:00:00",  "23:00:00", "24:00:00")
+date <- c("2016-07-12")
+times <- c("04:00:00", "06:00:00", "08:00:00", "10:00:00", "12:00:00", "14:00:00", "16:00:00", "18:00:00", "20:00:00", "22:00:00", "24:00:00")
 n = length(time)
 temp <- vector(length=length(date))
 

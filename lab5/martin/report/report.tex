@@ -79,42 +79,49 @@ Laboration Report 5}
     We also need to modify the \textit{time} and \textit{date} features to make them compliant with our functions.
     \lstinputlisting[firstline=104,lastline=108]{../share/script.r}
 
+    The above mentioned function are tied together in the garden keeper function:
+    \lstinputlisting[firstline=54,lastline=101]{../share/script.r}
+    Which also perform the temperature estimation by taking the mean of the kernel-values and their respective data points air temperature.
 
+    \section{Result}
+
+    Below are the result from the different kernel-methods and the result produced.
+    
     \begin{figure}[H]
     \centering
     \caption{Distance plot (time of day) for the observations (Ordered by time of day) \label{fig:time}}
         \begin{minipage}[]{0.2\textwidth}
-            \includegraphics[width=\textwidth]{share/1_time.eps}
+            \includegraphics[width=\textwidth]{share/1_time.png}
         \end{minipage}
         \begin{minipage}[]{0.2\textwidth}
-            \includegraphics[width=\textwidth]{share/2_time.eps}
+            \includegraphics[width=\textwidth]{share/2_time.png}
         \end{minipage}
         \begin{minipage}[]{0.2\textwidth}
-            \includegraphics[width=\textwidth]{share/3_time.eps}
+            \includegraphics[width=\textwidth]{share/3_time.png}
         \end{minipage}
         \begin{minipage}[]{0.2\textwidth}
-            \includegraphics[width=\textwidth]{share/4_time.eps}
+            \includegraphics[width=\textwidth]{share/4_time.png}
         \end{minipage}
         \begin{minipage}[]{0.2\textwidth}
-             \includegraphics[width=\textwidth]{share/5_time.eps}
+             \includegraphics[width=\textwidth]{share/5_time.png}
         \end{minipage}
         \begin{minipage}[]{0.2\textwidth}
-            \includegraphics[width=\textwidth]{share/6_time.eps}
+            \includegraphics[width=\textwidth]{share/6_time.png}
         \end{minipage}
         \begin{minipage}[]{0.2\textwidth}
-            \includegraphics[width=\textwidth]{share/7_time.eps}
+            \includegraphics[width=\textwidth]{share/7_time.png}
         \end{minipage}
         \begin{minipage}[]{0.2\textwidth}
-             \includegraphics[width=\textwidth]{share/8_time.eps}
+             \includegraphics[width=\textwidth]{share/8_time.png}
         \end{minipage}
         \begin{minipage}[]{0.2\textwidth}
-            \includegraphics[width=\textwidth]{share/9_time.eps}
+            \includegraphics[width=\textwidth]{share/9_time.png}
         \end{minipage}
         \begin{minipage}[]{0.2\textwidth}
-            \includegraphics[width=\textwidth]{share/10_time.eps}
+            \includegraphics[width=\textwidth]{share/10_time.png}
         \end{minipage}
         \begin{minipage}[]{0.2\textwidth}
-            \includegraphics[width=\textwidth]{share/11_time.eps}
+            \includegraphics[width=\textwidth]{share/11_time.png}
         \end{minipage}
     \end{figure}
 
@@ -124,11 +131,11 @@ Laboration Report 5}
     \centering
         \begin{minipage}[]{0.4\textwidth}
             \caption{Distance plot (day of year) for the observations (Ordered by month/day)\label{fig:day}}
-            \includegraphics[width=\textwidth]{share/1_date.eps}
+            \includegraphics[width=\textwidth]{share/1_date.png}
         \end{minipage}
         \begin{minipage}[]{0.4\textwidth}
             \caption{Distance plot (day of year) for the observations (ordered by station)\label{fig:dist}}
-            \includegraphics[width=\textwidth]{share/1_dist.eps}
+            \includegraphics[width=\textwidth]{share/1_dist.png}
         \end{minipage}
     \end{figure}
     The figures above shows the distance of the date-kernel given the observation specified above. As with the \textit{time-kernel} we see an increase around the date of our observation, but much lower window size. he reasoning for this choice is that I believe the day of the year affects the result much greater than the time of day or location.
@@ -155,7 +162,7 @@ Laboration Report 5}
             \includegraphics[width=\textwidth]{share/bad_result.eps}
         \end{minipage}
     \end{figure}
-    In this figure we can observe the temperature for another day. This time in the middle of summer. The values doesn't differ much from the day in April. This could be explained by the fact that the kernel features are independent and therefore nonindependent targets hours/days/locations all year around. This will make all results gravitate towards the year-mean temperature which is around \(4.6^\circ\). 
+    In this figure we can observe the temperature for another day. This time in the middle of summer. The values doesn't differ much from the day in April. This could be explained by the fact that the kernel features are independent and therefore nonindependent targets hours/days/locations all year around. This will make all results gravitate towards the year-mean temperature which is around \(4.6^\circ\). Possible solutions could be to limit the influence of far-away data points by only picking the \(N\) best from each kernel. The result would be more precise but the number of distances to select would have to vary depending on the data set, adding additional complexity to an already complex model.
 
     \nocite{*} % No warnings.
     \bibliographystyle{alpha}

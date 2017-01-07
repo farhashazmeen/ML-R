@@ -55,7 +55,7 @@ Individual Lab Report 4}
     \includegraphics[width=\textwidth]{figures/A1_fit}  
     \caption{Predictions of the tree model \label{fig:A1_fit}}
     \end{figure}
-    The predictions are seemingly close the means for each label but as already mentioned, the original data had a lot of variance to start with.
+    The number of labels (3) produced by the model is significantly less than the raw data. The labels seems to be located around the respective means of the raw data. 
 
     \begin{figure}[H]
 
@@ -63,7 +63,7 @@ Individual Lab Report 4}
     \includegraphics[width=\textwidth]{figures/A1_historgram_residuals}  
     \caption{Histogram of the model residuals \label{fig:A1_historgram_residuals}}
     \end{figure}
-    Ideally, the histogram would show a normal distribution of residuals with a mean of 0. This is not what can be deduced from the model, although 48 observations very few observations for a normal distribution to be observable with.
+    Ideally, the histogram would show a normal distribution of residuals with a mean of 0. This is not what can be deduced from the model, although 48 observations are very few observations for a normal distribution to be observable with.
 
     To mitigate this problem we use \textit{bootstrapping} on the optimal tree model. We first try \textit{non-parametric bootstrapping}. The result is plotted with a confidence level of 0.95 in figure ~\ref{fig:A1_nonparametric}
 
@@ -72,7 +72,7 @@ Individual Lab Report 4}
     \includegraphics[width=\textwidth]{figures/A1_nonparametric}  
     \caption{0.95 confidence bound of the non-parametric bootstrap. \label{fig:A1_nonparametric}}
     \end{figure}
-    We can observe how most of the observations are located within the confidence bound but significantly more than 0.5 still outside. The width of the confidence bound is varying over the different labels which could be a result of our tree model not being a good fit for the data.
+    We can observe how most of the observations are located within the confidence bound but significantly more than 0.05 still outside. The result would indicate that the tree model isn't a perfect fit for the data.
 
     We examine the same model, this time using \textit{parametric bootstrap} where we assume the observations fall within the distribution:
     \begin{equation}
@@ -85,10 +85,9 @@ Individual Lab Report 4}
     \includegraphics[width=\textwidth]{figures/A1_parametric}  
     \caption{0.95 confidence bound and predictions bound of the parametric bootstrap. \label{fig:A1_parametric}}
     \end{figure}
-    The 0.95 confidence bound is much tighter around the predictions compared to the \textit{non-parametric bootstrap} with the \textit{prediction bound} encompassing all-but a few outliers of the observations. The \textit{prediction bound} can be seen as the confidence bound of the assumed distribution, the fact that not all observations are with it would suggest not a perfect fit for the distribution. Looking back at the residuals in figure~\ref{fig:A1_historgram_residuals} it seems a bit far fetched to assume the observations would follow a normal distribution.
+    The 0.95 confidence bound is much tighter around the predictions compared to the \textit{non-parametric bootstrap} with the \textit{prediction bound} encompassing all-but a few outliers of the observations. The \textit{prediction bound} can be seen as the 0.95 confidence bound of the assumed distribution. Looking back at the residuals in figure~\ref{fig:A1_historgram_residuals} we cant tell for sure if the data would follow a normal distribution.
 
     Comparing the \textit{non-parametric} and the \textit{parametric} bootstrap it seems like the \textit{non-parametric} would be a better fit for the given data set. 
-
 
     \section{Assignment 2}
     In this assignment we are tasked with analyzing a data set containing observations regarding different levels of \emph{viscosity} and \emph{near-infrared spectra} for many different \emph{diesel fuels} using \emph{PCA} and \emph{ICA} (\emph{Component Analysis Functions}).
@@ -101,7 +100,7 @@ Individual Lab Report 4}
     \includegraphics[width=\textwidth]{figures/A2_pcahist.eps}
     \end{figure}
 
-    Only two components are required to reach 99 \% cumulative variance, which are \emph{X750 (PC1)} and \emph{X752 (PC2)}. Afterwards, we plot the scores of the chosen principal components in Figure~\ref{fig:pcascore}.
+    Only two components are required to reach 99 \% cumulative variance. The components are \emph{X750 (PC1)} and \emph{X752 (PC2)}. In Figure~\ref{fig:pcascore} the score for each of the two most significant PCs are displayed.
 
     \begin{figure}[H]           
     \centering
@@ -110,7 +109,7 @@ Individual Lab Report 4}
     \includegraphics[width=\textwidth]{figures/A2_pcascore.eps}
     \end{figure}
 
-    As can be seen, there is a large amount of independence between these two components. The outliers indicates unusual diesel fuels. We plot the traces for each of the two PCA with the highest variance impact on the variance. The resulting plots can be seen in Figures~\ref{fig:x750tp} and \ref{fig:x752tp}.
+    As can be seen, there is a large amount of independence between these two components on the X-axis while they are fairly compacted on the y-axis, ignoring the outliers. The outliers indicates unusual diesel fuels. We plot the traces for each of the two PCA with the highest variance impact on the variance. The resulting plots can be seen in Figures~\ref{fig:x750tp} and \ref{fig:x752tp}.
     \begin{figure}[H]      
     \centering
     \begin{minipage}[]{0.49\textwidth}
@@ -146,7 +145,7 @@ Individual Lab Report 4}
     \end{minipage}
     \end{figure}
 
-    The results are quite similar to those found in PCA, but inverted.
+    The results are quite similar to those found in PCA, but inverted. This is expected since we are looking for the independence instead of the correlation.
 
     We now plot the scores found by doing ICA, which can be seen in Figure~\ref{fig:icascores}.
     \begin{figure}[H]          
@@ -156,7 +155,7 @@ Individual Lab Report 4}
     \includegraphics[width=\textwidth]{figures/A2_icascore.eps}
     \end{figure}
 
-    The score distribution is similar to the PCA analysis but with a different magnitude and mirrored Y-values.
+    The score distribution is similar to the PCA analysis but with a different magnitude and mirrored Y-values. This could be explained by the analysis switching feature space.
 
     We perform a \emph{principal component regression} analysis with \emph{cross validation} in order to examine the number of components that should be selected for our model. The result can be observed in figure~\ref{fig:icascores}
 

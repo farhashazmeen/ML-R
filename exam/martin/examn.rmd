@@ -1,0 +1,213 @@
+---
+title: "exam"
+author: "mares480"
+date: "6 januari 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r, echo=FALSE}
+library(MASS)
+library(tree)
+library(pls)
+```
+
+# Assignment 1
+
+```{r}
+data = read.csv2("glass.csv",stringsAsFactors = TRUE)
+n = nrow(data)
+set.seed(12345)
+data = data[sample(1:n,n),]
+training = data[0:floor(n*0.5),]
+validation = data[floor(n*0.5):floor(n*0.75),]
+test = data[floor(n*0.75):n,]
+
+```
+
+Generate tree models for the testing and validation data and show the error plots
+
+```{r}
+n = nrow(training)
+control = tree.control(n, minsize=1)
+fit = tree(Al ~ ., data = training, control = control)
+fit.cv = cv.tree(fit)
+size = summary(fit)$size[1]
+print(size)
+results = matrix(0,size,2)
+variances = matrix(0,size,2)
+
+for(i in 2:size){
+  results[i,1] = mean((predict(prune.tree(fit,best = i), newdata=validation) - validation$Al)^2)
+  results[i,2] = mean((predict(prune.tree(fit,best = i), newdata=training) - training$Al)^2)
+  variances[i,1] = var(predict(prune.tree(fit,best = i), newdata=validation))
+  variances[i,2] = var(predict(prune.tree(fit,best = i), newdata=training))
+}
+
+plot(1:size, results[,1], type = "l")
+plot(1:size,variances[,1],col="Red")
+plot(1:size, results[,2], type = "l")
+plot(1:size,variances[,2],col="Red")
+
+```
+
+Best tree size
+
+```{r}
+best_size = fit.cv$size[which.min(fit.cv$dev)]
+optimal_tree = prune.tree(fit,best=best_size)
+print(best_size)
+summary(optimal_tree)
+```
+
+test error
+
+```{r}
+result = mean((predict(optimal_tree, newdata = test) - test$Al)^2)
+print(result)
+```
+
+PLS regression model
+
+```{r}
+fit = plsr(Al ~ ., data = training, validation = "CV")
+summary(fit)
+```
+
+We can observe how 3 components are enough to explain 90% of the variance of the data and 6 for the target. According to the CV 7 is the optimal number of varaibles to consider. 
+
+```{r}
+print(names(data)[which.max((fit$coefficients)^2)])
+validationplot(fit,val.type = "MS")
+```
+
+shows that the most significant component was the "Channel29" component. The function from the components to the result can be seen as the following coefficients (Al.6comps)
+```{r}
+fit$coefficients
+```
+
+and the predicted error of the PLS model is
+```{r}
+print( mean((predict(fit,newdata=test) - test$Al)^2))
+```
+
+Comparing the reggresion tree model and the PLS we can see how the PLS model had a lower MSE.
+
+# Assignment 2
+
+Plot the data in the coordinates hp vs qsec
+
+```{r}
+data = mtcars
+plot(data$hp, data$qsec, col=data$am+1)
+```
+
+The assumption of LDA is that the covaranance of all the calses should be equal (in practice simmilar) to each other. Looking at the plot above we can see how this asusmption seems to be fullfiled. The data will not be classified perfeclty, even if class priors are choosen perfeclt because no matter where you put the class sepperation, som elements will be missclassified.
+
+LDA with equal priors (0.5,0.5)
+```{r}
+fit_equal = lda(am ~ qsec + hp, data = data, prior = c(0.5, 0.5))
+plot(data$hp, data$qsec, col=predict(fit_equal)$class)
+```
+
+LDA with proportial priiors
+```{r}
+fit_prop = lda(am ~ qsec + hp, data = data)
+plot(data$hp, data$qsec, col=predict(fit_prop)$class)
+```
+
+looking at the missclassfication rate of both proportial priors and equal priors
+
+```{r, echo=FALSE}
+table(predict(fit_equal)$class, data$am)
+sum(predict(fit_equal)$class != data$am)/nrow(data)
+
+table(predict(fit_prop)$class, data$am)
+sum(predict(fit_prop)$class != data$am)/nrow(data)
+
+```
+we can observe how equal priors had a lower missclassfication rate compared to proportional priors.
+
+Looking at the models we can se that
+```{r , echo=FALSE}
+fit_equal
+fit_prop
+```
+the slope hasn't changed anything between the two models but the intercept has.
+
+IMplement kernel density estmiation with Epanechnikov kernel that uses matricies X, XTest and a sclara \(\lambda\) to estimate thedensity from X and predict it as XTest.
+
+```{r}
+epanechnikov = function(x) {
+  x_nor = norm(x,"F")
+  if(x_nor^2 >= 0){
+    return(1 - x_nor^2)
+  }
+  return(0)
+}
+
+kernel = function(X,XTest,lambda){
+ n = nrow(X)
+ return(apply(XTest,1, function(x){
+   value
+   for(i in 1:n){
+     value = 1/(n*lambda) * sum(epanechnikov(X[i,1] - x))
+   }
+   return(value)
+ }))
+}
+
+```
+
+
+# Assignemnt 3
+
+```{r}
+data = read.csv2("wine.csv", sep = ",")
+data$class[which(data$class == 2)] = -1
+for(i in 1:ncol(data)){data[,i] = as.numeric(data[,i])}
+
+set.seed(12345)
+samples = sample(1:nrow(data),floor(nrow(data)*0.7))
+training = data[samples,]
+test = data[-samples,]
+```
+
+```{r, echo=FALSE}
+library(neuralnet)
+```
+
+```{r}
+set.seed(12345)
+f <- as.formula(paste("class ~", paste(training[!training %in% "class"], collapse = " + ")))
+nn <- neuralnet(f, training, hidden = 0, act.fct = "tanh")
+print(colMeans(nn$generalized.weights[[1]]))
+```
+
+We can observe how the feature "proline" has a significant higher weight compared to all other features, this would indicate that it's the most important while the feaure "alcohol" is the least important.
+
+```{r}
+pred_train = sign(compute(nn, training)$net.result)
+pred_test =  sign(compute(nn, test)$net.result)
+miss_rate_train = sum(pred_train != training$class) / nrow(training)
+miss_rate_test = sum(pred_test != test$class) / nrow(test)
+print(miss_rate_test)
+print(miss_rate_train)
+```
+
+```{r}
+set.seed(12345)
+nn <- neuralnet(f, training, hidden = 1, act.fct = "tanh")
+plot(nn)
+print(colMeans(nn$generalized.weights[[1]]))
+```
+```{r}
+pred_train = sign(compute(nn, training)$net.result)
+pred_test =  sign(compute(nn, test)$net.result)
+miss_rate_train = sum(pred_train != training$class) / nrow(training)
+miss_rate_test = sum(pred_test != test$class) / nrow(test)
+print(miss_rate_test)
+print(miss_rate_train)
+```
